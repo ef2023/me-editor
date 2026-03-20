@@ -1,0 +1,107 @@
+.shell {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.intro {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.title {
+  max-width: 14ch;
+}
+
+.copy {
+  max-width: 58ch;
+  color: var(--color-ink-700);
+}
+
+.content {
+  display: grid;
+  gap: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.lead {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.category {
+  color: var(--color-ink-600);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.leadTitle {
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  line-height: 1.18;
+}
+
+.leadLink {
+  color: var(--color-ink-900);
+}
+
+.leadLink:hover {
+  color: var(--color-accent-700);
+}
+
+.leadExcerpt {
+  max-width: 62ch;
+  color: var(--color-ink-700);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  color: var(--color-ink-600);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.secondaryList {
+  display: grid;
+  gap: 1rem;
+}
+
+.secondaryItem {
+  display: grid;
+  gap: 0.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.secondaryTitle {
+  font-size: 1.05rem;
+}
+
+.secondaryLink {
+  color: var(--color-ink-900);
+}
+
+.secondaryLink:hover {
+  color: var(--color-accent-700);
+}
+
+.secondaryExcerpt {
+  color: var(--color-ink-700);
+  font-size: 0.96rem;
+}
+
+@media (min-width: 80rem) {
+  .shell {
+    grid-template-columns: minmax(16rem, 0.75fr) minmax(0, 1.25fr);
+    column-gap: 2.5rem;
+    align-items: start;
+  }
+
+  .content {
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+    column-gap: 2rem;
+  }
+}

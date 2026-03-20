@@ -1,0 +1,27 @@
+.grid {
+  display: grid;
+  gap: 1.25rem 1.75rem;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.card {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 1rem;
+}
+
+.card h3 {
+  font-size: 1.03rem;
+}
+
+.card p {
+  max-width: 34ch;
+  color: var(--color-ink-700);
+}
+
+@media (min-width: 80rem) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}

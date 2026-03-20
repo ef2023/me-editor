@@ -1,0 +1,38 @@
+.nav {
+  margin-bottom: 1.25rem;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.link {
+  color: var(--color-ink-600);
+  font-size: 0.88rem;
+}
+
+.link:hover {
+  color: var(--color-ink-900);
+}
+
+.current {
+  color: var(--color-ink-900);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.separator {
+  color: var(--color-ink-500);
+  font-size: 0.82rem;
+}

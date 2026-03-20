@@ -1,0 +1,24 @@
+{
+  "name": "studio",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "sanity dev --host 0.0.0.0 --port 3333",
+    "build": "sanity build",
+    "start": "sanity dev --host 0.0.0.0 --port 3333",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sanity/vision": "5.16.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sanity": "5.16.0",
+    "styled-components": "^6.3.11"
+  },
+  "devDependencies": {
+    "@types/node": "25.5.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}

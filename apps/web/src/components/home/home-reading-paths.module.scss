@@ -1,0 +1,64 @@
+.head {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  max-width: 15ch;
+}
+
+.copy {
+  max-width: 62ch;
+  color: var(--color-ink-700);
+}
+
+.grid {
+  display: grid;
+  gap: 0 1.75rem;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.step {
+  color: var(--color-ink-500);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.content {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.itemTitle {
+  font-size: 1.04rem;
+}
+
+.link {
+  color: var(--color-ink-900);
+}
+
+.link:hover {
+  color: var(--color-accent-700);
+}
+
+.content p {
+  color: var(--color-ink-700);
+  font-size: 0.96rem;
+}
+
+@media (min-width: 80rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}

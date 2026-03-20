@@ -1,0 +1,55 @@
+.section {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.head {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.45rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.category {
+  color: var(--color-ink-600);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: 1.02rem;
+}
+
+.link {
+  color: var(--color-ink-900);
+}
+
+.link:hover {
+  color: var(--color-accent-700);
+}
+
+.excerpt {
+  color: var(--color-ink-700);
+}
+
+@media (min-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+}

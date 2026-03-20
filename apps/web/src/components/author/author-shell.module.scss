@@ -1,0 +1,101 @@
+.hero {
+  display: grid;
+  gap: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.imageWrap {
+  width: 120px;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+.copy {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.title {
+  max-width: 14ch;
+}
+
+.role {
+  color: var(--color-ink-600);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.bio {
+  max-width: 62ch;
+  color: var(--color-ink-700);
+}
+
+.posts {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.sectionHead {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.item {
+  display: grid;
+  gap: 0.45rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.category {
+  color: var(--color-ink-600);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.itemTitle {
+  font-size: 1.08rem;
+}
+
+.link {
+  color: var(--color-ink-900);
+}
+
+.link:hover {
+  color: var(--color-accent-700);
+}
+
+.excerpt {
+  color: var(--color-ink-700);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  color: var(--color-ink-600);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+@media (min-width: 64rem) {
+  .hero {
+    grid-template-columns: 120px minmax(0, 1fr);
+    align-items: start;
+    column-gap: 1.5rem;
+  }
+}

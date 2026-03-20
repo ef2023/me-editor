@@ -1,0 +1,76 @@
+import {NextResponse} from 'next/server';
+import {Resend} from 'resend';
+import {writeClient} from '@/lib/sanity/write-client';
+import {
+  buildPendingId,
+  createNewsletterToken,
+  hashValue,
+  isValidEmail,
+  normalizeEmail,
+} from '@/lib/newsletter';
+
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
+
+export async function POST(request: Request) {
+  const formData = await request.formData();
+
+  const email = normalizeEmail(String(formData.get('email') ?? ''));
+  const redirectTo = String(formData.get('redirectTo') ?? '/');
+  const source = String(formData.get('source') ?? 'home');
+
+  if (!email || !isValidEmail(email)) {
+    return NextResponse.redirect(new URL(`${redirectTo}?newsletter=invalid`, request.url));
+  }
+
+  if (!process.env.SANITY_WRITE_TOKEN || !resend || !process.env.RESEND_FROM_EMAIL) {
+    return NextResponse.redirect(new URL(`${redirectTo}?newsletter=error`, request.url));
+  }
+
+  const token = createNewsletterToken();
+  const tokenHash = hashValue(token);
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString();
+  const _id = buildPendingId(email);
+
+  await writeClient.createOrReplace({
+    _id,
+    _type: 'newsletterPendingSubscriber',
+    email,
+    source,
+    status: 'pending',
+    tokenHash,
+    createdAt: now.toISOString(),
+    expiresAt,
+  });
+
+  const base =
+    process.env.NEWSLETTER_CONFIRM_REDIRECT_BASE ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    'http://localhost:3000';
+
+  const confirmUrl =
+    `${base}/api/newsletter/confirm?email=${encodeURIComponent(email)}` +
+    `&token=${encodeURIComponent(token)}`;
+
+  await resend.emails.send({
+    from: process.env.RESEND_FROM_EMAIL,
+    to: email,
+    subject: 'Confirme sua inscrição na newsletter',
+    html: `
+      <div style="font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#1d1d1d">
+        <h1 style="font-size:24px;margin-bottom:12px">Confirme sua inscrição</h1>
+        <p>Recebemos seu pedido para entrar na newsletter do Mistério do Evangelho.</p>
+        <p>
+          <a href="${confirmUrl}" style="display:inline-block;padding:12px 18px;background:#171717;color:#fff;text-decoration:none;border-radius:6px">
+            Confirmar inscrição
+          </a>
+        </p>
+        <p>Se você não fez esse pedido, ignore esta mensagem.</p>
+      </div>
+    `,
+  });
+
+  return NextResponse.redirect(new URL(`${redirectTo}?newsletter=pending`, request.url));
+}

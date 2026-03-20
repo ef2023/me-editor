@@ -1,0 +1,76 @@
+html,
+body {
+  background: var(--color-surface-25);
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+}
+
+body {
+  line-height: 1.7;
+}
+
+::selection {
+  background: var(--color-selection-bg);
+  color: var(--color-selection-text);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  transition:
+    color var(--duration-base) var(--easing-standard),
+    background-color var(--duration-base) var(--easing-standard),
+    border-color var(--duration-base) var(--easing-standard),
+    box-shadow var(--duration-base) var(--easing-standard),
+    opacity var(--duration-base) var(--easing-standard),
+    transform var(--duration-base) var(--easing-standard);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(48, 48, 48, 0.14);
+  outline-offset: 2px;
+}
+
+body > div {
+  isolation: isolate;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-ink-900);
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 4.8vw, 3.4rem);
+}
+
+h2 {
+  font-size: clamp(1.55rem, 3vw, 2.3rem);
+}
+
+h3 {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+p {
+  color: var(--color-ink-700);
+  font-size: 1rem;
+}
+
+main {
+  display: block;
+}
+
+.site-body {
+  min-height: 100vh;
+}

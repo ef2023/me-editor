@@ -1,0 +1,27 @@
+{
+    "name": "misterio-do-evangelho",
+    "private": true,
+    "packageManager": "pnpm@10.32.1",
+    "engines": {
+        "node": ">=20.9.0",
+        "pnpm": ">=10.32.1"
+    },
+    "scripts": {
+        "dev:web": "pnpm --filter web dev",
+        "build:web": "pnpm --filter web build",
+        "start:web": "pnpm --filter web start",
+        "lint:web": "pnpm --filter web lint",
+        "typecheck:web": "pnpm --filter web typecheck",
+        "dev:studio": "pnpm --filter studio dev",
+        "build:studio": "pnpm --filter studio build",
+        "typecheck:studio": "pnpm --filter studio typecheck",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "typegen:sanity": "pnpm --dir apps/studio exec sanity schema extract && pnpm --dir apps/studio exec sanity typegen generate"
+    },
+    "devDependencies": {
+        "@sanity/codegen": "3.68.3",
+        "eslint": "^9.39.4",
+        "prettier": "3.8.1"
+    }
+}

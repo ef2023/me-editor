@@ -1,0 +1,77 @@
+@use '../foundations' as *;
+
+:root {
+  color-scheme: light;
+
+  --color-primary-900: #{$color-primary-900};
+  --color-primary-800: #{$color-primary-800};
+  --color-primary-700: #{$color-primary-700};
+  --color-primary-600: #{$color-primary-600};
+  --color-primary-500: #{$color-primary-500};
+
+  --color-ink-900: #{$color-ink-900};
+  --color-ink-800: #{$color-ink-800};
+  --color-ink-700: #{$color-ink-700};
+  --color-ink-600: #{$color-ink-600};
+  --color-ink-500: #{$color-ink-500};
+
+  --color-surface-0: #{$color-surface-0};
+  --color-surface-25: #{$color-surface-25};
+  --color-surface-50: #{$color-surface-50};
+  --color-surface-100: #{$color-surface-100};
+  --color-surface-200: #{$color-surface-200};
+
+  --color-border-soft: #{$color-border-soft};
+  --color-border-strong: #{$color-border-strong};
+
+  --color-accent-700: #{$color-accent-700};
+  --color-accent-600: #{$color-accent-600};
+  --color-accent-500: #{$color-accent-500};
+
+  --color-success: #{$color-success};
+  --color-warning: #{$color-warning};
+  --color-danger: #{$color-danger};
+
+  --color-selection-bg: #{$color-selection-bg};
+  --color-selection-text: #{$color-selection-text};
+
+  --radius-xs: #{$radius-xs};
+  --radius-sm: #{$radius-sm};
+  --radius-md: #{$radius-md};
+  --radius-lg: #{$radius-lg};
+  --radius-xl: #{$radius-xl};
+  --radius-2xl: #{$radius-2xl};
+  --radius-pill: #{$radius-pill};
+
+  --border-width-thin: #{$border-width-thin};
+  --border-width-strong: #{$border-width-strong};
+
+  --space-1: #{$space-1};
+  --space-2: #{$space-2};
+  --space-3: #{$space-3};
+  --space-4: #{$space-4};
+  --space-5: #{$space-5};
+  --space-6: #{$space-6};
+  --space-8: #{$space-8};
+  --space-10: #{$space-10};
+  --space-12: #{$space-12};
+  --space-16: #{$space-16};
+  --space-20: #{$space-20};
+  --space-24: #{$space-24};
+
+  --shadow-sm: #{$shadow-sm};
+  --shadow-md: #{$shadow-md};
+  --shadow-lg: #{$shadow-lg};
+
+  --font-sans: #{$font-sans};
+  --font-serif: #{$font-serif};
+  --font-mono: #{$font-mono};
+
+  --duration-fast: #{$duration-fast};
+  --duration-base: #{$duration-base};
+  --duration-slow: #{$duration-slow};
+  --easing-standard: #{$easing-standard};
+
+  --site-max-width: 1180px;
+  --content-max-width: 760px;
+}

@@ -13,6 +13,14 @@
   gap: 1rem;
 }
 
+.heroEyebrow,
+.featuredEyebrow {
+  display: block;
+  width: 100%;
+  max-width: none;
+  white-space: nowrap;
+}
+
 .heroTitle {
   max-width: 18ch;
   font-size: clamp(2.2rem, 5vw, 4rem);

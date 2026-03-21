@@ -58,9 +58,15 @@ async function renderSection(
         <section key={section._key} className={styles.section}>
           <div className={`container ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
+              {section.eyebrow ? (
+                <p className={`eyebrow ${styles.heroEyebrow}`}>{section.eyebrow}</p>
+              ) : null}
+
               {section.title ? <h1 className={styles.heroTitle}>{section.title}</h1> : null}
-              {section.description ? <p className={styles.heroDescription}>{section.description}</p> : null}
+
+              {section.description ? (
+                <p className={styles.heroDescription}>{section.description}</p>
+              ) : null}
 
               <div className={styles.heroActions}>
                 {section.primaryLabel && section.primaryHref ? (
@@ -91,7 +97,7 @@ async function renderSection(
 
             {section.featuredPost ? (
               <aside className={styles.heroAside}>
-                <p className="eyebrow">Em destaque</p>
+                <p className={`eyebrow ${styles.featuredEyebrow}`}>Em destaque</p>
 
                 <article className={styles.featuredEditorial}>
                   <div className={styles.featuredEditorialCopy}>
@@ -112,7 +118,9 @@ async function renderSection(
 
                     <div className={styles.postMeta}>
                       <span>{section.featuredPost.readingTime}</span>
-                      <span>Atualizado em {formatDate(section.featuredPost.updatedAt)}</span>
+                      <span>
+                        Atualizado em {formatDate(section.featuredPost.updatedAt)}
+                      </span>
                       {section.featuredPost.author ? (
                         <span>Por {section.featuredPost.author.name}</span>
                       ) : null}
@@ -152,7 +160,9 @@ async function renderSection(
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
               {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
-              {section.description ? <p className={styles.blockHeadDescription}>{section.description}</p> : null}
+              {section.description ? (
+                <p className={styles.blockHeadDescription}>{section.description}</p>
+              ) : null}
             </div>
 
             <div className={styles.postsGrid}>
@@ -207,7 +217,9 @@ async function renderSection(
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
               {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
-              {section.description ? <p className={styles.blockHeadDescription}>{section.description}</p> : null}
+              {section.description ? (
+                <p className={styles.blockHeadDescription}>{section.description}</p>
+              ) : null}
             </div>
 
             <div className={styles.listGrid}>
@@ -245,7 +257,9 @@ async function renderSection(
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
               {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
-              {section.description ? <p className={styles.blockHeadDescription}>{section.description}</p> : null}
+              {section.description ? (
+                <p className={styles.blockHeadDescription}>{section.description}</p>
+              ) : null}
             </div>
 
             <div className={styles.principlesGrid}>
@@ -272,13 +286,17 @@ async function renderSection(
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
               {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
-              {section.description ? <p className={styles.blockHeadDescription}>{section.description}</p> : null}
+              {section.description ? (
+                <p className={styles.blockHeadDescription}>{section.description}</p>
+              ) : null}
             </div>
 
             <div className={styles.categoryGrid}>
               {categories.map((category, index) => (
                 <article key={category.slug} className={styles.categoryCard}>
-                  <span className={styles.categoryNumber}>{String(index + 1).padStart(2, '0')}</span>
+                  <span className={styles.categoryNumber}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
                   <div className={styles.categoryCopy}>
                     <h3>
                       <TrackedLink
@@ -308,7 +326,9 @@ async function renderSection(
             <div className={styles.ctaShell}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
               {section.title ? <h2 className={styles.ctaTitle}>{section.title}</h2> : null}
-              {section.description ? <p className={styles.ctaDescription}>{section.description}</p> : null}
+              {section.description ? (
+                <p className={styles.ctaDescription}>{section.description}</p>
+              ) : null}
 
               {section.showNewsletterForm ? (
                 <NewsletterForm
@@ -317,7 +337,9 @@ async function renderSection(
                 />
               ) : null}
 
-              {!section.showNewsletterForm && section.buttonLabel && section.buttonHref ? (
+              {!section.showNewsletterForm &&
+              section.buttonLabel &&
+              section.buttonHref ? (
                 <TrackedLink
                   href={section.buttonHref}
                   className={styles.primaryAction}

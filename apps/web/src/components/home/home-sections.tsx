@@ -1,14 +1,31 @@
-import {SanityImage} from '@/components/media/sanity-image';
-import {TrackedLink} from '@/components/analytics/tracked-link';
-import {getCategories, getHomePage, type HomeSection} from '@/lib/content-source';
-import {formatDate} from '@/lib/content-source';
-import styles from './home-sections.module.scss';
+import {SanityImage} from '@/components/media/sanity-image'
+import {TrackedLink} from '@/components/analytics/tracked-link'
+import {getCategories, getHomePage, type HomeSection} from '@/lib/content-source'
+import {formatDate} from '@/lib/content-source'
+import styles from './home-sections.module.scss'
+
+type NewsletterStatus = 'pending' | 'confirmed' | 'invalid' | 'error' | undefined
 
 function NewsletterForm({
   successMessage,
+  newsletterStatus,
 }: {
-  successMessage?: string;
+  successMessage?: string
+  newsletterStatus?: NewsletterStatus
 }) {
+  let feedback: string | null = null
+
+  if (newsletterStatus === 'pending') {
+    feedback =
+      successMessage || 'Confira seu e-mail para confirmar a inscrição.'
+  } else if (newsletterStatus === 'confirmed') {
+    feedback = 'Sua inscrição foi confirmada com sucesso.'
+  } else if (newsletterStatus === 'invalid') {
+    feedback = 'Digite um e-mail válido para continuar.'
+  } else if (newsletterStatus === 'error') {
+    feedback = 'Não foi possível processar a inscrição agora.'
+  }
+
   return (
     <div className={styles.newsletterWrap}>
       <form action="/api/newsletter/subscribe" method="post" className={styles.newsletterForm}>
@@ -26,12 +43,15 @@ function NewsletterForm({
         </button>
       </form>
 
-      {successMessage ? <p className={styles.newsletterHelp}>{successMessage}</p> : null}
+      {feedback ? <p className={styles.newsletterHelp}>{feedback}</p> : null}
     </div>
-  );
+  )
 }
 
-async function renderSection(section: HomeSection) {
+async function renderSection(
+  section: HomeSection,
+  newsletterStatus?: NewsletterStatus,
+) {
   switch (section._type) {
     case 'heroSection':
       return (
@@ -109,7 +129,7 @@ async function renderSection(section: HomeSection) {
             ) : null}
           </div>
         </section>
-      );
+      )
 
     case 'curatedPostsSection':
       return (
@@ -164,7 +184,7 @@ async function renderSection(section: HomeSection) {
             </div>
           </div>
         </section>
-      );
+      )
 
     case 'readingPathsSection':
       return (
@@ -202,7 +222,7 @@ async function renderSection(section: HomeSection) {
             </div>
           </div>
         </section>
-      );
+      )
 
     case 'principlesSection':
       return (
@@ -224,13 +244,13 @@ async function renderSection(section: HomeSection) {
             </div>
           </div>
         </section>
-      );
+      )
 
     case 'categoryGridSection': {
       const categories =
         section.categories && section.categories.length > 0
           ? section.categories
-          : await getCategories();
+          : await getCategories()
 
       return (
         <section key={section._key} className={styles.section}>
@@ -263,7 +283,7 @@ async function renderSection(section: HomeSection) {
             </div>
           </div>
         </section>
-      );
+      )
     }
 
     case 'ctaBanner':
@@ -277,7 +297,10 @@ async function renderSection(section: HomeSection) {
               {section.description ? <p className={styles.ctaDescription}>{section.description}</p> : null}
 
               {section.showNewsletterForm ? (
-                <NewsletterForm successMessage={section.successMessage} />
+                <NewsletterForm
+                  successMessage={section.successMessage}
+                  newsletterStatus={newsletterStatus}
+                />
               ) : null}
 
               {!section.showNewsletterForm && section.buttonLabel && section.buttonHref ? (
@@ -294,12 +317,22 @@ async function renderSection(section: HomeSection) {
             </div>
           </div>
         </section>
-      );
+      )
   }
 }
 
-export async function HomeSections() {
-  const home = await getHomePage();
+export async function HomeSections({
+  newsletterStatus,
+}: {
+  newsletterStatus?: NewsletterStatus
+}) {
+  const home = await getHomePage()
 
-  return <>{await Promise.all(home.sections.map((section) => renderSection(section)))}</>;
+  return (
+    <>
+      {await Promise.all(
+        home.sections.map((section) => renderSection(section, newsletterStatus)),
+      )}
+    </>
+  )
 }

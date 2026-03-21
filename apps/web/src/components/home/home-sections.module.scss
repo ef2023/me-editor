@@ -13,14 +13,6 @@
   gap: 1rem;
 }
 
-.heroEyebrow,
-.featuredEyebrow {
-  display: block;
-  width: 100%;
-  max-width: none;
-  white-space: nowrap;
-}
-
 .heroTitle {
   max-width: 18ch;
   font-size: clamp(2.2rem, 5vw, 4rem);
@@ -72,6 +64,15 @@
   align-content: start;
 }
 
+.heroEyebrow,
+.featuredEyebrow {
+  width: fit-content;
+  max-width: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
 .featuredEditorial {
   display: grid;
   gap: 1rem;
@@ -105,7 +106,6 @@
 
 .featuredEditorialImageLink {
   display: block;
-  align-self: start;
 }
 
 .featuredEditorialImage {
@@ -115,12 +115,10 @@
   object-fit: cover;
 }
 
-.heroImageLink,
 .postImageLink {
   display: block;
 }
 
-.heroImage,
 .postImage {
   width: 100%;
   height: auto;
@@ -128,14 +126,12 @@
   object-fit: cover;
 }
 
-.heroFeaturedCard,
 .postCard,
 .principleCard {
   display: grid;
   gap: 0.55rem;
 }
 
-.blockEyebrow,
 .postEyebrow {
   color: var(--color-ink-600);
   font-size: 0.74rem;
@@ -144,20 +140,17 @@
   text-transform: uppercase;
 }
 
-.blockTitle,
 .postTitle {
   font-size: 1.12rem;
   line-height: 1.2;
 }
 
-.blockTitle a,
 .postTitle a,
 .categoryCopy a,
 .listTitle a {
   color: var(--color-ink-900);
 }
 
-.blockDescription,
 .postExcerpt,
 .blockHeadDescription,
 .ctaDescription,
@@ -283,12 +276,6 @@
   .heroGrid {
     grid-template-columns: minmax(0, 1.1fr) minmax(25rem, 0.9fr);
     gap: 3rem;
-  }
-
-  .featuredEditorial {
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
-    gap: 1.5rem;
-    align-items: start;
   }
 
   .postsGrid,

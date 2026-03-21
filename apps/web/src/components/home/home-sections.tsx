@@ -100,6 +100,26 @@ async function renderSection(
                 <p className={`eyebrow ${styles.featuredEyebrow}`}>Em destaque</p>
 
                 <article className={styles.featuredEditorial}>
+                  {section.featuredPost.coverImage ? (
+                    <TrackedLink
+                      href={`/${section.featuredPost.categorySlug}/${section.featuredPost.slug}`}
+                      className={styles.featuredEditorialImageLink}
+                      eventName="editorial_block_click"
+                      section="hero_featured"
+                      label={section.featuredPost.title}
+                    >
+                      <SanityImage
+                        image={section.featuredPost.coverImage}
+                        alt={section.featuredPost.coverImage.alt ?? section.featuredPost.title}
+                        width={1200}
+                        height={840}
+                        sizes="(min-width: 1024px) 34vw, 100vw"
+                        className={styles.featuredEditorialImage}
+                        priority
+                      />
+                    </TrackedLink>
+                  ) : null}
+
                   <div className={styles.featuredEditorialCopy}>
                     <h2 className={styles.featuredEditorialTitle}>
                       <TrackedLink
@@ -126,26 +146,6 @@ async function renderSection(
                       ) : null}
                     </div>
                   </div>
-
-                  {section.featuredPost.coverImage ? (
-                    <TrackedLink
-                      href={`/${section.featuredPost.categorySlug}/${section.featuredPost.slug}`}
-                      className={styles.featuredEditorialImageLink}
-                      eventName="editorial_block_click"
-                      section="hero_featured"
-                      label={section.featuredPost.title}
-                    >
-                      <SanityImage
-                        image={section.featuredPost.coverImage}
-                        alt={section.featuredPost.coverImage.alt ?? section.featuredPost.title}
-                        width={1200}
-                        height={840}
-                        sizes="(min-width: 1024px) 28vw, 100vw"
-                        className={styles.featuredEditorialImage}
-                        priority
-                      />
-                    </TrackedLink>
-                  ) : null}
                 </article>
               </aside>
             ) : null}

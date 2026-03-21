@@ -1,51 +1,45 @@
-import Image from 'next/image';
-import type {SanityImageValue} from '@/lib/content-source';
-import {urlFor} from '@/lib/sanity/image';
+import Image, {type ImageProps} from 'next/image'
+import type {SanityImageValue} from '@/lib/content-source'
 
-type SanityImageProps = {
-  image?: SanityImageValue;
-  alt?: string;
-  width: number;
-  height: number;
-  sizes?: string;
-  className?: string;
-  priority?: boolean;
-};
+type SanityImageProps = Omit<ImageProps, 'src'> & {
+  image?: SanityImageValue
+}
+
+function buildSanityImageUrl(baseUrl: string, width: number, height: number) {
+  const url = new URL(baseUrl)
+  url.searchParams.set('auto', 'format')
+  url.searchParams.set('fit', 'crop')
+  url.searchParams.set('w', String(width))
+  url.searchParams.set('h', String(height))
+  return url.toString()
+}
 
 export function SanityImage({
   image,
   alt,
   width,
   height,
-  sizes = '100vw',
-  className,
-  priority = false,
+  ...props
 }: SanityImageProps) {
-  if (!image?.asset?.url) {
-    return null;
+  const baseUrl = image?.asset?.url
+
+  if (!baseUrl) {
+    return null
   }
 
-  const src = urlFor(image)
-    .width(width)
-    .height(height)
-    .fit('crop')
-    .auto('format')
-    .url();
+  if (typeof width !== 'number' || typeof height !== 'number') {
+    return null
+  }
 
-  const resolvedAlt = alt ?? image.alt ?? '';
-  const blurDataURL = image.asset.metadata?.lqip;
+  const src = buildSanityImageUrl(baseUrl, width, height)
 
   return (
     <Image
       src={src}
-      alt={resolvedAlt}
+      alt={alt || image?.alt || 'Imagem do conteúdo'}
       width={width}
       height={height}
-      sizes={sizes}
-      className={className}
-      priority={priority}
-      placeholder={blurDataURL ? 'blur' : 'empty'}
-      blurDataURL={blurDataURL}
+      {...props}
     />
-  );
+  )
 }

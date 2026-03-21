@@ -1,6 +1,6 @@
-import {revalidatePath, revalidateTag} from 'next/cache';
-import {type NextRequest, NextResponse} from 'next/server';
-import {parseBody} from 'next-sanity/webhook';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { type NextRequest, NextResponse } from 'next/server';
+import { parseBody } from 'next-sanity/webhook';
 
 type WebhookPayload = {
   _type?: string;
@@ -15,6 +15,7 @@ const TAGS_BY_TYPE: Record<string, string[]> = {
   author: ['author', 'post'],
   legalPage: ['legalPage'],
   siteSettings: ['siteSettings'],
+  homePage: ['homePage', 'post', 'category', 'author'],
 };
 
 export async function POST(req: NextRequest) {
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const {isValidSignature, body} = await parseBody<WebhookPayload>(req, secret);
+    const { isValidSignature, body } = await parseBody<WebhookPayload>(req, secret);
 
     if (!isValidSignature) {
       return new Response(
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
           message: 'Invalid signature',
           body,
         }),
-        {status: 401},
+        { status: 401 },
       );
     }
 
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
           message: 'Bad Request',
           body,
         }),
-        {status: 400},
+        { status: 400 },
       );
     }
 
@@ -57,6 +58,10 @@ export async function POST(req: NextRequest) {
 
     if (body.path) {
       revalidatePath(body.path);
+    }
+
+    if (body._type === 'homePage') {
+      revalidatePath('/');
     }
 
     if (body._type === 'siteSettings') {
@@ -74,7 +79,7 @@ export async function POST(req: NextRequest) {
 
     return new Response(
       error instanceof Error ? error.message : 'Unexpected error',
-      {status: 500},
+      { status: 500 },
     );
   }
 }

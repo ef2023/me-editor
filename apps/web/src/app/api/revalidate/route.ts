@@ -10,11 +10,11 @@ type WebhookPayload = {
 };
 
 const TAGS_BY_TYPE: Record<string, string[]> = {
-  post: ['post', 'category', 'author'],
-  category: ['category', 'post'],
-  author: ['author', 'post'],
+  post: ['post', 'category', 'author', 'homePage'],
+  category: ['category', 'post', 'homePage'],
+  author: ['author', 'post', 'homePage'],
   legalPage: ['legalPage'],
-  siteSettings: ['siteSettings'],
+  siteSettings: ['siteSettings', 'homePage'],
   homePage: ['homePage', 'post', 'category', 'author'],
 };
 
@@ -60,7 +60,8 @@ export async function POST(req: NextRequest) {
       revalidatePath(body.path);
     }
 
-    if (body._type === 'homePage') {
+    const tiposQueAfetamAHome = ['post', 'category', 'siteSettings', 'homePage'];
+    if (tiposQueAfetamAHome.includes(body._type)) {
       revalidatePath('/');
     }
 
@@ -73,9 +74,10 @@ export async function POST(req: NextRequest) {
       type: body._type,
       path: body.path ?? null,
       tags,
+      source: 'Sanity Webhook',
     });
   } catch (error) {
-    console.error(error);
+    console.error('Webhook Error:', error);
 
     return new Response(
       error instanceof Error ? error.message : 'Unexpected error',

@@ -64,6 +64,15 @@
   align-content: start;
 }
 
+.heroEyebrow,
+.featuredEyebrow {
+  width: fit-content;
+  max-width: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
 .featuredEditorial {
   display: grid;
   gap: 1rem;

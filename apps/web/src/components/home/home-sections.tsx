@@ -1,7 +1,7 @@
-import {SanityImage} from '@/components/media/sanity-image'
-import {TrackedLink} from '@/components/analytics/tracked-link'
-import {getCategories, getHomePage, type HomeSection} from '@/lib/content-source'
-import {formatDate} from '@/lib/content-source'
+import { SanityImage } from '@/components/media/sanity-image'
+import { TrackedLink } from '@/components/analytics/tracked-link'
+import { getCategories, getHomePage, type HomeSection } from '@/lib/content-source'
+import { formatDate } from '@/lib/content-source'
 import styles from './home-sections.module.scss'
 
 type NewsletterStatus = 'pending' | 'confirmed' | 'invalid' | 'error' | undefined
@@ -58,7 +58,7 @@ async function renderSection(
         <section key={section._key} className={styles.section}>
           <div className={`container ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
+              {section.eyebrow ? <p className={`eyebrow ${styles.heroEyebrow}`}>{section.eyebrow}</p> : null}
               {section.title ? <h1 className={styles.heroTitle}>{section.title}</h1> : null}
               {section.description ? <p className={styles.heroDescription}>{section.description}</p> : null}
 
@@ -91,8 +91,8 @@ async function renderSection(
 
             {section.featuredPost ? (
               <aside className={styles.heroAside}>
-                <p className="eyebrow">Em destaque</p>
-
+                <p className={`eyebrow ${styles.featuredEyebrow}`}>Em destaque</p>
+                
                 <article className={styles.featuredEditorial}>
                   <div className={styles.featuredEditorialCopy}>
                     <h2 className={styles.featuredEditorialTitle}>

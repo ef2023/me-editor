@@ -1,10 +1,11 @@
 .section {
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  padding-block: clamp(2.75rem, 5vw, 4.75rem);
 }
 
 .heroGrid {
   display: grid;
   gap: 2rem;
+  align-items: start;
 }
 
 .heroCopy {
@@ -13,19 +14,25 @@
 }
 
 .heroTitle {
-  max-width: 11ch;
+  max-width: 18ch;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .heroDescription {
-  max-width: 62ch;
+  max-width: 64ch;
   color: var(--color-ink-700);
   font-size: 1.04rem;
+  line-height: 1.7;
 }
 
 .heroActions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.9rem;
+  margin-top: 0.35rem;
 }
 
 .primaryAction,
@@ -57,6 +64,49 @@
   align-content: start;
 }
 
+.featuredEditorial {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.featuredEditorialCopy {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.featuredEditorialTitle {
+  max-width: 22ch;
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.featuredEditorialTitle a {
+  color: var(--color-ink-900);
+}
+
+.featuredEditorialExcerpt {
+  max-width: 54ch;
+  color: var(--color-ink-700);
+  line-height: 1.7;
+}
+
+.featuredEditorialImageLink {
+  display: block;
+  align-self: start;
+}
+
+.featuredEditorialImage {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
 .heroImageLink,
 .postImageLink {
   display: block;
@@ -66,7 +116,7 @@
 .postImage {
   width: 100%;
   height: auto;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   object-fit: cover;
 }
 
@@ -88,7 +138,8 @@
 
 .blockTitle,
 .postTitle {
-  font-size: 1.08rem;
+  font-size: 1.12rem;
+  line-height: 1.2;
 }
 
 .blockTitle a,
@@ -108,19 +159,34 @@
 
 .blockHead {
   display: grid;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 0.8rem;
+  margin-bottom: 1.75rem;
 }
 
-.blockHeadTitle,
+.blockHeadTitle {
+  max-width: 30ch;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
 .ctaTitle {
-  max-width: 15ch;
+  max-width: 26ch;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 .postsGrid,
 .principlesGrid {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
+}
+
+.postCard {
+  align-content: start;
 }
 
 .postMeta {
@@ -160,6 +226,11 @@
 .categoryCopy {
   display: grid;
   gap: 0.35rem;
+}
+
+.listTitle {
+  font-size: 1.06rem;
+  line-height: 1.2;
 }
 
 .ctaShell {
@@ -202,14 +273,20 @@
 
 @media (min-width: 64rem) {
   .heroGrid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.85fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(25rem, 0.9fr);
+    gap: 3rem;
+  }
+
+  .featuredEditorial {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+    gap: 1.5rem;
     align-items: start;
   }
 
   .postsGrid,
   .principlesGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 1.5rem;
+    column-gap: 1.6rem;
   }
 
   .listGrid,

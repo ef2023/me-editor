@@ -91,40 +91,54 @@ async function renderSection(
 
             {section.featuredPost ? (
               <aside className={styles.heroAside}>
-                {section.featuredPost.coverImage ? (
-                  <TrackedLink
-                    href={`/${section.featuredPost.categorySlug}/${section.featuredPost.slug}`}
-                    className={styles.heroImageLink}
-                    eventName="editorial_block_click"
-                    section="hero_featured"
-                    label={section.featuredPost.title}
-                  >
-                    <SanityImage
-                      image={section.featuredPost.coverImage}
-                      alt={section.featuredPost.coverImage.alt ?? section.featuredPost.title}
-                      width={900}
-                      height={560}
-                      sizes="(min-width: 1024px) 34vw, 100vw"
-                      className={styles.heroImage}
-                      priority
-                    />
-                  </TrackedLink>
-                ) : null}
+                <p className="eyebrow">Em destaque</p>
 
-                <div className={styles.heroFeaturedCard}>
-                  <p className={styles.blockEyebrow}>Em destaque</p>
-                  <h2 className={styles.blockTitle}>
+                <article className={styles.featuredEditorial}>
+                  <div className={styles.featuredEditorialCopy}>
+                    <h2 className={styles.featuredEditorialTitle}>
+                      <TrackedLink
+                        href={`/${section.featuredPost.categorySlug}/${section.featuredPost.slug}`}
+                        eventName="editorial_block_click"
+                        section="hero_featured"
+                        label={section.featuredPost.title}
+                      >
+                        {section.featuredPost.title}
+                      </TrackedLink>
+                    </h2>
+
+                    <p className={styles.featuredEditorialExcerpt}>
+                      {section.featuredPost.excerpt}
+                    </p>
+
+                    <div className={styles.postMeta}>
+                      <span>{section.featuredPost.readingTime}</span>
+                      <span>Atualizado em {formatDate(section.featuredPost.updatedAt)}</span>
+                      {section.featuredPost.author ? (
+                        <span>Por {section.featuredPost.author.name}</span>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {section.featuredPost.coverImage ? (
                     <TrackedLink
                       href={`/${section.featuredPost.categorySlug}/${section.featuredPost.slug}`}
+                      className={styles.featuredEditorialImageLink}
                       eventName="editorial_block_click"
                       section="hero_featured"
                       label={section.featuredPost.title}
                     >
-                      {section.featuredPost.title}
+                      <SanityImage
+                        image={section.featuredPost.coverImage}
+                        alt={section.featuredPost.coverImage.alt ?? section.featuredPost.title}
+                        width={1200}
+                        height={840}
+                        sizes="(min-width: 1024px) 28vw, 100vw"
+                        className={styles.featuredEditorialImage}
+                        priority
+                      />
                     </TrackedLink>
-                  </h2>
-                  <p className={styles.blockDescription}>{section.featuredPost.excerpt}</p>
-                </div>
+                  ) : null}
+                </article>
               </aside>
             ) : null}
           </div>
@@ -157,7 +171,7 @@ async function renderSection(
                         alt={post.coverImage.alt ?? post.title}
                         width={1200}
                         height={720}
-                        sizes="(min-width: 1024px) 42vw, 100vw"
+                        sizes="(min-width: 1024px) 30vw, 100vw"
                         className={styles.postImage}
                       />
                     </TrackedLink>

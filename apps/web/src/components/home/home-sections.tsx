@@ -39,7 +39,7 @@ function NewsletterForm({
           className={styles.newsletterInput}
         />
         <button type="submit" className={styles.newsletterButton}>
-          Confirmar por e-mail
+          Assinar
         </button>
       </form>
 

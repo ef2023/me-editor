@@ -11,7 +11,7 @@ const dataset = process.env.SANITY_STUDIO_DATASET || 'production';
 
 const previewOrigin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://misterio-do-evangelho.vercel.app';
 
-const singletonTypes = new Set(['siteSettings', 'homePage', 'avisoEditorialPage', 'politicaDePrivacidadePage', 'politicaDeCookiesPage']);
+const singletonTypes = new Set(['siteSettings', 'homePage']);
 
 export default defineConfig({
   name: 'default',

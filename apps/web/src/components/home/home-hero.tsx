@@ -22,7 +22,7 @@ export async function HomeHero() {
     <section className={styles.hero} id="topo">
       <div className={`container ${styles.inner}`}>
         <div className={styles.copy}>
-          <p className="eyebrow">{hero.eyebrow ?? 'Portal cristão editoril'}</p>
+          <p className="eyebrow">{hero.eyebrow ?? 'Portal cristão editorial'}</p>
 
           <h1 className={styles.title}>{hero.title}</h1>
 

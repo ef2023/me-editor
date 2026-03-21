@@ -8,8 +8,8 @@ import {schemaTypes} from './schemaTypes';
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'g6fc3waj';
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production';
-
-const previewOrigin = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const previewOrigin =
+  process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 const singletonTypes = new Set(['siteSettings', 'homePage']);
 

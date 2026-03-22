@@ -155,7 +155,7 @@ async function renderSection(
 
     case 'curatedPostsSection':
       return (
-        <section key={section._key} className={styles.section}>
+        <section key={section._key} className={'{styles.section} ${styles.curatedSection}'}>
           <div className="container">
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}

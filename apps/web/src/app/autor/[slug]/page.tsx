@@ -1,6 +1,8 @@
 import {notFound} from 'next/navigation';
 import type {Metadata} from 'next';
 import {AuthorShell} from '@/components/author/author-shell';
+import {SiteHeader} from '@/components/layout/site-header';
+import {SiteFooter} from '@/components/layout/site-footer';
 import {
   getAllAuthors,
   getAuthorBySlug,
@@ -56,5 +58,13 @@ export default async function AuthorPage({params}: PageProps) {
 
   const posts = await getPostsByAuthor(author.slug);
 
-  return <AuthorShell author={author} posts={posts} />;
+  return (
+    <>
+      <SiteHeader />
+      <main>
+        <AuthorShell author={author} posts={posts} />
+      </main>
+      <SiteFooter />
+    </>
+  );
 }

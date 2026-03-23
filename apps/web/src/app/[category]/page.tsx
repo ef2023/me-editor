@@ -1,6 +1,8 @@
 import {notFound} from 'next/navigation';
 import type {Metadata} from 'next';
 import {CategoryShell} from '@/components/category/category-shell';
+import {SiteHeader} from '@/components/layout/site-header';
+import {SiteFooter} from '@/components/layout/site-footer';
 import {buildMetadata} from '@/lib/seo';
 import {getCategoryListing} from '@/lib/content-source';
 
@@ -43,5 +45,13 @@ export default async function CategoryPage({params, searchParams}: PageProps) {
     notFound();
   }
 
-  return <CategoryShell listing={listing} />;
+  return (
+    <>
+      <SiteHeader />
+      <main>
+        <CategoryShell listing={listing} />
+      </main>
+      <SiteFooter />
+    </>
+  );
 }

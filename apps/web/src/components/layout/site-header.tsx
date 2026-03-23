@@ -1,11 +1,11 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import styles from './site-header.module.scss';
 
 const navItems = [
   { label: 'Sobre', href: '/sobre' },
   { label: 'Contato', href: '/contato' },
   {
-    label: 'Artigo modelo',
+    label: 'Comece por aqui',
     href: '/significados-biblicos/o-que-significa-evangelho-na-biblia',
   },
 ];

@@ -86,11 +86,7 @@ export async function GET(request: Request) {
     })
     .commit();
 
-  try {
     await ensureContactInNewsletterSegment(email);
-  } catch (error) {
-    console.error('Resend contact sync failed:', error);
-  }
 
   if (resend && process.env.RESEND_FROM_EMAIL) {
     await resend.emails.send({

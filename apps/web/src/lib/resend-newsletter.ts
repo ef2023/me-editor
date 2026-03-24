@@ -35,24 +35,30 @@ export async function ensureContactInNewsletterSegment(email: string) {
     throw new Error('Resend client is not configured');
   }
 
-  const segmentId = requiredEnv('RESEND_NEWSLETTER_SEGMENT_ID');
+  const segmentId = process.env.RESEND_NEWSLETTER_SEGMENT_ID;
 
-  const {error: createError} = await resend.contacts.create({
+  if (!segmentId) {
+    throw new Error('Missing RESEND_NEWSLETTER_SEGMENT_ID');
+  }
+
+  // 1. cria o contato (ou ignora se já existe)
+  const {error: contactError} = await resend.contacts.create({
     email,
     unsubscribed: false,
   });
 
-  if (createError && !maybeDuplicateError(createError)) {
-    throw createError;
+  if (contactError) {
+    console.error('Erro ao criar contato:', contactError);
   }
 
+  // 2. adiciona ao segmento
   const {error: segmentError} = await resend.contacts.segments.add({
     email,
     segmentId,
   });
 
-  if (segmentError && !maybeDuplicateError(segmentError)) {
-    throw segmentError;
+  if (segmentError) {
+    console.error('Erro ao adicionar ao segmento:', segmentError);
   }
 }
 

@@ -20,12 +20,23 @@ export async function POST(request: Request) {
   const redirectTo = String(formData.get('redirectTo') ?? '/');
   const source = String(formData.get('source') ?? 'home');
 
+  const baseUrl =
+    process.env.NEWSLETTER_CONFIRM_REDIRECT_BASE ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    'http://localhost:3000';
+
   if (!email || !isValidEmail(email)) {
-    return NextResponse.redirect(new URL(`${redirectTo}?newsletter=invalid`, request.url));
+    const redirectUrl = new URL(redirectTo || '/', baseUrl);
+    redirectUrl.searchParams.set('newsletter', 'invalid');
+
+    return NextResponse.redirect(redirectUrl);
   }
 
   if (!process.env.SANITY_WRITE_TOKEN || !resend || !process.env.RESEND_FROM_EMAIL) {
-    return NextResponse.redirect(new URL(`${redirectTo}?newsletter=error`, request.url));
+    const redirectUrl = new URL(redirectTo || '/', baseUrl);
+    redirectUrl.searchParams.set('newsletter', 'error');
+
+    return NextResponse.redirect(redirectUrl);
   }
 
   const token = createNewsletterToken();
@@ -45,14 +56,9 @@ export async function POST(request: Request) {
     expiresAt,
   });
 
-  const base =
-    process.env.NEWSLETTER_CONFIRM_REDIRECT_BASE ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    'http://localhost:3000';
-
-  const confirmUrl =
-    `${base}/api/newsletter/confirm?email=${encodeURIComponent(email)}` +
-    `&token=${encodeURIComponent(token)}`;
+  const confirmUrl = new URL('/api/newsletter/confirm', baseUrl);
+  confirmUrl.searchParams.set('email', email);
+  confirmUrl.searchParams.set('token', token);
 
   await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL,
@@ -72,5 +78,8 @@ export async function POST(request: Request) {
     `,
   });
 
-  return NextResponse.redirect(new URL(`${redirectTo}?newsletter=pending`, request.url));
+  const redirectUrl = new URL(redirectTo || '/', baseUrl);
+  redirectUrl.searchParams.set('newsletter', 'pending');
+
+  return NextResponse.redirect(redirectUrl);
 }

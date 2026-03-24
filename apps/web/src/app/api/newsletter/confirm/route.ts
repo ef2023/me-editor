@@ -23,7 +23,10 @@ export async function GET(request: Request) {
     'http://localhost:3000';
 
   if (!email || !token || !process.env.SANITY_WRITE_TOKEN) {
-    return NextResponse.redirect(`${base}/newsletter/confirm?status=invalid`);
+    const redirectUrl = new URL('/newsletter/confirm', base);
+    redirectUrl.searchParams.set('status', 'invalid');
+
+    return NextResponse.redirect(redirectUrl);
   }
 
   const {data} = await sanityFetch<PendingDoc | null>({
@@ -36,14 +39,20 @@ export async function GET(request: Request) {
   });
 
   if (!data) {
-    return NextResponse.redirect(`${base}/newsletter/confirm?status=missing`);
+    const redirectUrl = new URL('/newsletter/confirm', base);
+    redirectUrl.searchParams.set('status', 'missing');
+
+    return NextResponse.redirect(redirectUrl);
   }
 
   const isExpired = new Date(data.expiresAt).getTime() < Date.now();
   const isValid = data.tokenHash === hashValue(token);
 
   if (!isValid || isExpired) {
-    return NextResponse.redirect(`${base}/newsletter/confirm?status=expired`);
+    const redirectUrl = new URL('/newsletter/confirm', base);
+    redirectUrl.searchParams.set('status', 'expired');
+
+    return NextResponse.redirect(redirectUrl);
   }
 
   const subscriberId = buildSubscriberId(email);
@@ -59,10 +68,16 @@ export async function GET(request: Request) {
     confirmedAt: now,
   });
 
-  await writeClient.patch(data._id).set({
-    status: 'confirmed',
-    confirmedAt: now,
-  }).commit();
+  await writeClient
+    .patch(data._id)
+    .set({
+      status: 'confirmed',
+      confirmedAt: now,
+    })
+    .commit();
 
-  return NextResponse.redirect(`${base}/newsletter/confirm?status=confirmed`);
+  const redirectUrl = new URL('/newsletter/confirm', base);
+  redirectUrl.searchParams.set('status', 'confirmed');
+
+  return NextResponse.redirect(redirectUrl);
 }

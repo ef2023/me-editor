@@ -68,42 +68,42 @@ export const postType = defineType({
           type: 'string',
           validation: (rule) => rule.required(),
         }),
+      ],
+    }),
+    defineField({
+      name: 'newsletter',
+      title: 'Newsletter',
+      type: 'object',
+      fields: [
         defineField({
-          name: 'newsletter',
-          title: 'Newsletter',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'sendOnPublish',
-              title: 'Enviar newsletter ao publicar',
-              type: 'boolean',
-              initialValue: false,
-            }),
-            defineField({
-              name: 'subject',
-              title: 'Assunto do e-mail',
-              type: 'string',
-            }),
-            defineField({
-              name: 'teaser',
-              title: 'Resumo para newsletter',
-              type: 'text',
-              rows: 3,
-            }),
-            defineField({
-              name: 'sentAt',
-              title: 'Enviado em',
-              type: 'datetime',
-              readOnly: true,
-            }),
-            defineField({
-              name: 'broadcastId',
-              title: 'Broadcast ID',
-              type: 'string',
-              readOnly: true,
-            }),
-          ],
-        })
+          name: 'sendOnPublish',
+          title: 'Enviar newsletter ao publicar',
+          type: 'boolean',
+          initialValue: false,
+        }),
+        defineField({
+          name: 'subject',
+          title: 'Assunto do e-mail',
+          type: 'string',
+        }),
+        defineField({
+          name: 'teaser',
+          title: 'Resumo para newsletter',
+          type: 'text',
+          rows: 3,
+        }),
+        defineField({
+          name: 'sentAt',
+          title: 'Enviado em',
+          type: 'datetime',
+          readOnly: true,
+        }),
+        defineField({
+          name: 'broadcastId',
+          title: 'Broadcast ID',
+          type: 'string',
+          readOnly: true,
+        }),
       ],
     }),
     defineField({

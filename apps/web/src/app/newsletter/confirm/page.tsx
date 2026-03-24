@@ -3,7 +3,7 @@ import {SiteFooter} from '@/components/layout/site-footer';
 
 type PageProps = {
   searchParams: Promise<{
-    status?: string;
+    status?: string | string[];
   }>;
 };
 
@@ -26,8 +26,13 @@ const messages: Record<string, {title: string; description: string}> = {
   },
 };
 
+function normalizeStatus(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export default async function NewsletterConfirmPage({searchParams}: PageProps) {
-  const {status = 'invalid'} = await searchParams;
+  const resolvedSearchParams = await searchParams;
+  const status = normalizeStatus(resolvedSearchParams.status) ?? 'invalid';
   const message = messages[status] ?? messages.invalid;
 
   return (

@@ -13,6 +13,17 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
+function redirectWithNewsletterStatus(
+  baseUrl: string,
+  redirectTo: string,
+  status: 'pending' | 'invalid' | 'error',
+) {
+  const redirectUrl = new URL(redirectTo || '/', baseUrl);
+  redirectUrl.searchParams.set('newsletter', status);
+
+  return NextResponse.redirect(redirectUrl, {status: 303});
+}
+
 export async function POST(request: Request) {
   const formData = await request.formData();
 
@@ -26,23 +37,23 @@ export async function POST(request: Request) {
     'http://localhost:3000';
 
   if (!email || !isValidEmail(email)) {
-    const redirectUrl = new URL(redirectTo || '/', baseUrl);
-    redirectUrl.searchParams.set('newsletter', 'invalid');
-
-    return NextResponse.redirect(redirectUrl);
+    return redirectWithNewsletterStatus(baseUrl, redirectTo, 'invalid');
   }
 
-  if (!process.env.SANITY_WRITE_TOKEN || !resend || !process.env.RESEND_FROM_EMAIL) {
-    const redirectUrl = new URL(redirectTo || '/', baseUrl);
-    redirectUrl.searchParams.set('newsletter', 'error');
-
-    return NextResponse.redirect(redirectUrl);
+  if (
+    !process.env.SANITY_WRITE_TOKEN ||
+    !resend ||
+    !process.env.RESEND_FROM_EMAIL
+  ) {
+    return redirectWithNewsletterStatus(baseUrl, redirectTo, 'error');
   }
 
   const token = createNewsletterToken();
   const tokenHash = hashValue(token);
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + 1000 * 60 * 60 * 24).toISOString();
+  const expiresAt = new Date(
+    now.getTime() + 1000 * 60 * 60 * 24,
+  ).toISOString();
   const _id = buildPendingId(email);
 
   await writeClient.createOrReplace({
@@ -78,8 +89,5 @@ export async function POST(request: Request) {
     `,
   });
 
-  const redirectUrl = new URL(redirectTo || '/', baseUrl);
-  redirectUrl.searchParams.set('newsletter', 'pending');
-
-  return NextResponse.redirect(redirectUrl);
+  return redirectWithNewsletterStatus(baseUrl, redirectTo, 'pending');
 }

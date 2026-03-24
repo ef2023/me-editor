@@ -7,6 +7,7 @@ import {
   hashValue,
   normalizeEmail,
 } from '@/lib/newsletter';
+import {ensureContactInNewsletterSegment} from '@/lib/resend-newsletter';
 
 type PendingDoc = {
   _id: string;
@@ -44,7 +45,6 @@ export async function GET(request: Request) {
     return redirectWithStatus(baseUrl, 'invalid');
   }
 
-  // Leitura fresca, sem helper com cache
   const data = await writeClient.fetch<PendingDoc | null>(
     newsletterPendingByEmailQuery,
     {email},
@@ -85,6 +85,12 @@ export async function GET(request: Request) {
       confirmedAt: now,
     })
     .commit();
+
+  try {
+    await ensureContactInNewsletterSegment(email);
+  } catch (error) {
+    console.error('Resend contact sync failed:', error);
+  }
 
   if (resend && process.env.RESEND_FROM_EMAIL) {
     await resend.emails.send({

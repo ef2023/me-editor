@@ -316,3 +316,20 @@ export const newsletterPendingByEmailQuery = defineQuery(`
     expiresAt
   }
 `);
+
+export const postNewsletterByIdQuery = defineQuery(`
+  *[_type == "post" && _id == $id][0]{
+    _id,
+    title,
+    excerpt,
+    "slug": slug.current,
+    "categorySlug": category->slug.current,
+    newsletter{
+      sendOnPublish,
+      subject,
+      teaser,
+      sentAt,
+      broadcastId
+    }
+  }
+`);

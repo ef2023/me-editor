@@ -1,5 +1,6 @@
 import {SanityImage} from '@/components/media/sanity-image'
 import {TrackedLink} from '@/components/analytics/tracked-link'
+import {NewsletterInlineForm} from '@/components/newsletter/newsletter-inline-form'
 import {getCategories, getHomePage, type HomeSection} from '@/lib/content-source'
 import {formatDate} from '@/lib/content-source'
 import styles from './home-sections.module.scss'
@@ -8,43 +9,19 @@ type NewsletterStatus = 'pending' | 'confirmed' | 'invalid' | 'error' | undefine
 
 function NewsletterForm({
   successMessage,
-  newsletterStatus,
+  newsletterStatus: _newsletterStatus,
 }: {
   successMessage?: string
   newsletterStatus?: NewsletterStatus
 }) {
-  let feedback: string | null = null
-
-  if (newsletterStatus === 'pending') {
-    feedback =
-      successMessage || 'Confira seu e-mail para confirmar a inscrição.'
-  } else if (newsletterStatus === 'confirmed') {
-    feedback = 'Sua inscrição foi confirmada com sucesso.'
-  } else if (newsletterStatus === 'invalid') {
-    feedback = 'Digite um e-mail válido para continuar.'
-  } else if (newsletterStatus === 'error') {
-    feedback = 'Não foi possível processar a inscrição agora.'
-  }
-
   return (
-    <div className={styles.newsletterWrap}>
-      <form action="/api/newsletter/subscribe" method="post" className={styles.newsletterForm}>
-        <input type="hidden" name="redirectTo" value="/" />
-        <input type="hidden" name="source" value="home" />
-        <input
-          type="email"
-          name="email"
-          placeholder="Seu melhor e-mail"
-          required
-          className={styles.newsletterInput}
-        />
-        <button type="submit" className={styles.newsletterButton}>
-          Assinar
-        </button>
-      </form>
-
-      {feedback ? <p className={styles.newsletterHelp}>{feedback}</p> : null}
-    </div>
+    <NewsletterInlineForm
+      redirectTo="/"
+      source="home"
+      successMessage={
+        successMessage || 'Confira seu e-mail para confirmar a inscrição.'
+      }
+    />
   )
 }
 
@@ -188,6 +165,7 @@ async function renderSection(
                   ) : null}
 
                   <span className={styles.postEyebrow}>{post.eyebrow}</span>
+
                   <h3 className={styles.postTitle}>
                     <TrackedLink
                       href={`/${post.categorySlug}/${post.slug}`}
@@ -198,7 +176,9 @@ async function renderSection(
                       {post.title}
                     </TrackedLink>
                   </h3>
+
                   <p className={styles.postExcerpt}>{post.excerpt}</p>
+
                   <div className={styles.postMeta}>
                     <span>{post.readingTime}</span>
                     <span>Atualizado em {formatDate(post.updatedAt)}</span>
@@ -297,6 +277,7 @@ async function renderSection(
                   <span className={styles.categoryNumber}>
                     {String(index + 1).padStart(2, '0')}
                   </span>
+
                   <div className={styles.categoryCopy}>
                     <h3>
                       <TrackedLink

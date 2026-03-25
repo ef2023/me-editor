@@ -13,6 +13,25 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
+function isAjaxRequest(request: Request) {
+  return request.headers.get('x-newsletter-ajax') === '1';
+}
+
+function jsonStatus(
+  status: 'pending' | 'invalid' | 'error',
+  message: string,
+  httpStatus = 200,
+) {
+  return NextResponse.json(
+    {
+      ok: status === 'pending',
+      status,
+      message,
+    },
+    {status: httpStatus},
+  );
+}
+
 function redirectWithNewsletterStatus(
   baseUrl: string,
   redirectTo: string,
@@ -36,7 +55,13 @@ export async function POST(request: Request) {
     process.env.NEXT_PUBLIC_SITE_URL ??
     'http://localhost:3000';
 
+  const ajax = isAjaxRequest(request);
+
   if (!email || !isValidEmail(email)) {
+    if (ajax) {
+      return jsonStatus('invalid', 'Digite um e-mail válido para continuar.', 400);
+    }
+
     return redirectWithNewsletterStatus(baseUrl, redirectTo, 'invalid');
   }
 
@@ -45,6 +70,14 @@ export async function POST(request: Request) {
     !resend ||
     !process.env.RESEND_FROM_EMAIL
   ) {
+    if (ajax) {
+      return jsonStatus(
+        'error',
+        'Não foi possível processar sua inscrição agora.',
+        500,
+      );
+    }
+
     return redirectWithNewsletterStatus(baseUrl, redirectTo, 'error');
   }
 
@@ -88,6 +121,13 @@ export async function POST(request: Request) {
       </div>
     `,
   });
+
+  if (ajax) {
+    return jsonStatus(
+      'pending',
+      'Confira seu e-mail para confirmar a inscrição.',
+    );
+  }
 
   return redirectWithNewsletterStatus(baseUrl, redirectTo, 'pending');
 }

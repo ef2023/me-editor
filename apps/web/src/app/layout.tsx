@@ -1,11 +1,14 @@
 import type {Metadata} from 'next';
 import {draftMode} from 'next/headers';
+import {GoogleTagManager} from '@next/third-parties/google';
 import {VisualEditing} from 'next-sanity/visual-editing';
 import {DisableDraftMode} from '@/components/preview/disable-draft-mode';
 import '@/styles/globals.scss';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+  ),
   title: {
     default: 'Mistério do Evangelho',
     template: '%s | Mistério do Evangelho',
@@ -23,6 +26,7 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-BR">
+      <GoogleTagManager gtmId="GTM-5DDJQ7TG" />
       <body className="site-body">
         {children}
         {isDraftMode ? (

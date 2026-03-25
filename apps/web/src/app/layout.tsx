@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import {draftMode} from 'next/headers';
 import {GoogleTagManager} from '@next/third-parties/google';
+import {SpeedInsights} from '@vercel/speed-insights/next';
 import {VisualEditing} from 'next-sanity/visual-editing';
 import {DisableDraftMode} from '@/components/preview/disable-draft-mode';
 import '@/styles/globals.scss';
@@ -29,6 +30,7 @@ export default async function RootLayout({
       <GoogleTagManager gtmId="GTM-5DDJQ7TG" />
       <body className="site-body">
         {children}
+        <SpeedInsights />
         {isDraftMode ? (
           <>
             <VisualEditing />

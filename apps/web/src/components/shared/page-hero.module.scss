@@ -20,9 +20,14 @@
 }
 
 .description {
-  max-width: 60ch;
+  width: 100%;
+  max-width: none;
+  max-inline-size: none;
+  min-width: 0;
   font-size: 1.02rem;
   color: var(--color-ink-700);
+  white-space: normal;
+  text-wrap: pretty;
 }
 
 .actions {

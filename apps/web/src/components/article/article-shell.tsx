@@ -24,7 +24,7 @@ export function ArticleShell({category, post, relatedPosts}: ArticleShellProps) 
 
   return (
     <section className="section-tight">
-      <div className="container">
+      <div className="container-content">
         <Breadcrumbs
           items={[
             {label: 'Home', href: '/'},
@@ -33,45 +33,43 @@ export function ArticleShell({category, post, relatedPosts}: ArticleShellProps) 
           ]}
         />
 
-        <header className={styles.header}>
-          <p className="eyebrow">{post.eyebrow}</p>
-          <h1 className={styles.title}>{post.title}</h1>
-          <p className={styles.excerpt}>{post.excerpt}</p>
-
-          <div className={styles.meta}>
-            <span>{post.readingTime}</span>
-            <span>Publicado em {formatDate(post.publishedAt)}</span>
-            <span>Atualizado em {formatDate(post.updatedAt)}</span>
-          </div>
-
-          {post.author ? (
-            <p className={styles.authorLine}>
-              Por{' '}
-              <Link href={`/autor/${post.author.slug}`} className={styles.authorLink}>
-                {post.author.name}
-              </Link>
-              {post.author.role ? ` · ${post.author.role}` : ''}
-            </p>
-          ) : null}
-
-          {post.coverImage ? (
-            <div className={styles.coverWrap}>
-              <SanityImage
-                image={post.coverImage}
-                alt={post.coverImage.alt ?? post.title}
-                width={1600}
-                height={900}
-                sizes="(min-width: 1280px) 760px, 100vw"
-                className={styles.coverImage}
-                priority
-              />
-            </div>
-          ) : null}
-        </header>
-      </div>
-
-      <div className="container-content">
         <article className={styles.article}>
+          <header className={styles.header}>
+            <p className="eyebrow">{post.eyebrow}</p>
+            <h1 className={styles.title}>{post.title}</h1>
+            <p className={styles.excerpt}>{post.excerpt}</p>
+
+            <div className={styles.meta}>
+              <span>{post.readingTime}</span>
+              <span>Publicado em {formatDate(post.publishedAt)}</span>
+              <span>Atualizado em {formatDate(post.updatedAt)}</span>
+            </div>
+
+            {post.author ? (
+              <p className={styles.authorLine}>
+                Por{' '}
+                <Link href={`/autor/${post.author.slug}`} className={styles.authorLink}>
+                  {post.author.name}
+                </Link>
+                {post.author.role ? ` · ${post.author.role}` : ''}
+              </p>
+            ) : null}
+
+            {post.coverImage ? (
+              <div className={styles.coverWrap}>
+                <SanityImage
+                  image={post.coverImage}
+                  alt={post.coverImage.alt ?? post.title}
+                  width={1600}
+                  height={900}
+                  sizes="(min-width: 1280px) 760px, 100vw"
+                  className={styles.coverImage}
+                  priority
+                />
+              </div>
+            ) : null}
+          </header>
+
           <div className={styles.layout}>
             <div className={styles.body}>
               {hasPortableBody ? (

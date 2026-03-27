@@ -1,7 +1,6 @@
 .article {
   display: grid;
   gap: 1.75rem;
-  min-width: 0;
 }
 
 .header {
@@ -61,13 +60,11 @@
 .layout {
   display: grid;
   gap: 2rem;
-  min-width: 0;
 }
 
 .body {
   display: grid;
   gap: 1.5rem;
-  min-width: 0;
 }
 
 .section {
@@ -95,7 +92,6 @@
 .richText {
   display: grid;
   gap: 1rem;
-  min-width: 0;
 }
 
 .richText :is(h2, h3, blockquote, ul, p) {

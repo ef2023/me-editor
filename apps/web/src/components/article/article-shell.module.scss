@@ -1,17 +1,25 @@
 .article {
   display: grid;
   gap: 1.75rem;
+  min-width: 0;
 }
 
 .header {
   display: grid;
   gap: 1rem;
+  min-width: 0;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--color-border-strong);
 }
 
-.title {
-  max-width: 14ch;
+.title,
+.articleTitle {
+  width: 100%;
+  max-width: none;
+  max-inline-size: none;
+  min-width: 0;
+  white-space: normal;
+  text-wrap: pretty;
 }
 
 .excerpt {
@@ -53,11 +61,13 @@
 .layout {
   display: grid;
   gap: 2rem;
+  min-width: 0;
 }
 
 .body {
   display: grid;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 .section {
@@ -85,6 +95,7 @@
 .richText {
   display: grid;
   gap: 1rem;
+  min-width: 0;
 }
 
 .richText :is(h2, h3, blockquote, ul, p) {

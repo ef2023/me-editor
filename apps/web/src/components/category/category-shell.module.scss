@@ -6,6 +6,7 @@
 .card {
   display: grid;
   gap: 0.55rem;
+  min-width: 0;
   padding: 0 0 1rem;
   border-bottom: 1px solid var(--color-border-soft);
 }
@@ -31,7 +32,13 @@
 }
 
 .title {
+  width: 100%;
+  max-width: none;
+  max-inline-size: none;
+  min-width: 0;
   font-size: clamp(1.15rem, 2.1vw, 1.35rem);
+  white-space: normal;
+  text-wrap: pretty;
 }
 
 .titleLink {

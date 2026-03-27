@@ -13,7 +13,7 @@ type PageHeroProps = {
   actions?: HeroAction[];
 };
 
-export function PageHero({ eyebrow, title, description, actions = [] }: PageHeroProps) {
+export function PageHero({eyebrow, title, description, actions = []}: PageHeroProps) {
   return (
     <section className={styles.hero}>
       <div className="container">

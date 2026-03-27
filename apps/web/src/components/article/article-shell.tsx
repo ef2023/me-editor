@@ -24,7 +24,7 @@ export function ArticleShell({category, post, relatedPosts}: ArticleShellProps) 
 
   return (
     <section className="section-tight">
-      <div className="container-content">
+      <div className="container">
         <Breadcrumbs
           items={[
             {label: 'Home', href: '/'},

@@ -11,10 +11,10 @@ type CategoryShellProps = {
   listing: CategoryListingResult;
 };
 
-type RichTextSection = Extract<ModularSection, { _type: 'richTextSection' }>;
-type CuratedPostsSection = Extract<ModularSection, { _type: 'curatedPostsSection' }>;
-type CtaBannerSection = Extract<ModularSection, { _type: 'ctaBanner' }>;
-type FaqSection = Extract<ModularSection, { _type: 'faqSection' }>;
+type RichTextSection = Extract<ModularSection, {_type: 'richTextSection'}>;
+type CuratedPostsSection = Extract<ModularSection, {_type: 'curatedPostsSection'}>;
+type CtaBannerSection = Extract<ModularSection, {_type: 'ctaBanner'}>;
+type FaqSection = Extract<ModularSection, {_type: 'faqSection'}>;
 
 function isRichTextSection(section: ModularSection): section is RichTextSection {
   return section._type === 'richTextSection';

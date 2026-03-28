@@ -11,13 +11,6 @@ type TrackedLinkProps = LinkProps & {
   label?: string;
 };
 
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-    dataLayer?: unknown[];
-  }
-}
-
 export function TrackedLink({
   children,
   className,
@@ -27,13 +20,18 @@ export function TrackedLink({
   ...props
 }: TrackedLinkProps) {
   function handleClick() {
-    window.dataLayer?.push({
+    const win = window as Window & {
+      gtag?: (...args: unknown[]) => void;
+      dataLayer?: unknown[];
+    };
+
+    win.dataLayer?.push({
       event: eventName,
       section,
       label,
     });
 
-    window.gtag?.('event', eventName, {
+    win.gtag?.('event', eventName, {
       section,
       label,
     });

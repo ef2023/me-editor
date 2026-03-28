@@ -18,7 +18,6 @@ import {
   categoryBySlugQuery,
   homePageQuery,
   legalPageBySlugQuery,
-  newsletterPendingByEmailQuery,
   postByCategoryAndSlugQuery,
   postsByAuthorQuery,
   postsByCategoryCountQuery,

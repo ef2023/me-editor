@@ -62,27 +62,36 @@ function applyConsent(choice: ConsentChoice) {
 }
 
 export function CookieConsentBanner() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const stored =
-      (localStorage.getItem(STORAGE_KEY) as ConsentChoice | null) ||
-      (readCookie(STORAGE_KEY) as ConsentChoice | '');
-
-    if (stored === 'accepted' || stored === 'rejected') {
-      applyConsent(stored);
-      setIsVisible(false);
-      return;
+  const [storedConsent] = useState<ConsentChoice | ''>(() => {
+    if (typeof window === 'undefined') {
+      return '';
     }
 
-    setIsVisible(true);
-  }, []);
+    const localStored = localStorage.getItem(STORAGE_KEY) as
+      | ConsentChoice
+      | null;
+    const cookieStored = readCookie(STORAGE_KEY) as ConsentChoice | '';
+
+    return localStored || cookieStored;
+  });
+  const [isDismissed, setIsDismissed] = useState(false);
+
+  useEffect(() => {
+    if (storedConsent === 'accepted' || storedConsent === 'rejected') {
+      applyConsent(storedConsent);
+    }
+  }, [storedConsent]);
 
   function handleConsent(choice: ConsentChoice) {
     persistConsent(choice);
     applyConsent(choice);
-    setIsVisible(false);
+    setIsDismissed(true);
   }
+
+  const isVisible =
+    !isDismissed &&
+    storedConsent !== 'accepted' &&
+    storedConsent !== 'rejected';
 
   if (!isVisible) {
     return null;

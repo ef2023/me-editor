@@ -1,6 +1,8 @@
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {ArticleShell} from '@/components/article/article-shell';
+import {SiteFooter} from '@/components/layout/site-footer';
+import {SiteHeader} from '@/components/layout/site-header';
 import {
   getCategoryBySlug,
   getPostByCategoryAndSlug,
@@ -101,10 +103,16 @@ export default async function ArticlePage({params}: PageProps) {
   const relatedPosts = await getRelatedPosts(post, 3);
 
   return (
-    <ArticleShell
-      category={category}
-      post={post}
-      relatedPosts={relatedPosts}
-    />
+    <>
+      <SiteHeader />
+      <main>
+        <ArticleShell
+          category={category}
+          post={post}
+          relatedPosts={relatedPosts}
+        />
+      </main>
+      <SiteFooter />
+    </>
   );
 }

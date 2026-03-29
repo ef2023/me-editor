@@ -206,6 +206,7 @@ async function renderSection(
               {section.paths.map((path, index) => (
                 <article key={`${section._key}-${index}`} className={styles.listItem}>
                   <span className={styles.listStep}>{path.step}</span>
+
                   <div className={styles.listCopy}>
                     <h3 className={styles.listTitle}>
                       {path.post ? (
@@ -221,6 +222,7 @@ async function renderSection(
                         path.title
                       )}
                     </h3>
+
                     <p>{path.description}</p>
                   </div>
                 </article>

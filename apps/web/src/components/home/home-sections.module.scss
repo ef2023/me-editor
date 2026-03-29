@@ -5,12 +5,15 @@
 .heroGrid {
   display: grid;
   gap: 2rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .heroCopy {
   display: grid;
   gap: 1rem;
+  align-content: start;
+  min-width: 0;
+  height: 100%;
 }
 
 .heroTitle {
@@ -62,6 +65,8 @@
   display: grid;
   gap: 1rem;
   align-content: start;
+  min-width: 0;
+  height: 100%;
 }
 
 .heroEyebrow,
@@ -75,18 +80,38 @@
 
 .featuredEditorial {
   display: grid;
+  grid-template-rows: auto 1fr;
   gap: 1rem;
-  padding-top: 1rem;
+  min-width: 0;
+  height: 100%;
+  align-content: start;
+}
+
+.featuredEditorialImageLink {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.featuredEditorialImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .featuredEditorialCopy {
   display: grid;
   gap: 0.75rem;
   align-content: start;
+  min-width: 0;
 }
 
 .featuredEditorialTitle {
-  max-width: 22ch;
+  margin: 0;
+  max-width: none;
   font-size: clamp(1.5rem, 2.8vw, 2.2rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -98,20 +123,10 @@
 }
 
 .featuredEditorialExcerpt {
-  max-width: 54ch;
+  margin: 0;
+  max-width: none;
   color: var(--color-ink-700);
   line-height: 1.7;
-}
-
-.featuredEditorialImageLink {
-  display: block;
-}
-
-.featuredEditorialImage {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-md);
-  object-fit: cover;
 }
 
 .postImageLink {
@@ -273,7 +288,7 @@
 
 @media (min-width: 64rem) {
   .heroGrid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(25rem, 0.9fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem;
   }
 

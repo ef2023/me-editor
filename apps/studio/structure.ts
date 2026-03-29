@@ -12,6 +12,7 @@ export const structure: StructureResolver = (S) =>
         .child(S.document().schemaType('homePage').documentId('homePage')),
       S.divider(),
       S.documentTypeListItem('post').title('Posts'),
+      S.listItem().title('Esboços').child(S.documentTypeList('esboco').title('Esboços')),
       S.documentTypeListItem('category').title('Categorias'),
       S.documentTypeListItem('author').title('Autores'),
       S.documentTypeListItem('legalPage').title('Páginas legais'),

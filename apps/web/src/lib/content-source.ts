@@ -334,6 +334,8 @@ export type HomeSection =
       eyebrow?: string;
       title?: string;
       description?: string;
+      buttonLabel?: string;
+      buttonHref?: string;
       items: Array<{
         step?: string;
         title?: string;
@@ -727,6 +729,8 @@ export async function getHomePage(): Promise<HomePageContent> {
           eyebrow: section.eyebrow,
           title: section.title,
           description: section.description,
+          buttonLabel: section.buttonLabel,
+          buttonHref: section.buttonHref,
           items: (section.items ?? []).map((item) => ({
             step: item.step,
             title: item.title,

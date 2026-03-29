@@ -205,6 +205,12 @@
   text-wrap: balance;
 }
 
+.blockFooter {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1.5rem;
+}
+
 .ctaTitle {
   max-width: 26ch;
   font-size: clamp(1.6rem, 2.8vw, 2.4rem);

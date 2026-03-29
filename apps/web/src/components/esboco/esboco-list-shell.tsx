@@ -27,6 +27,7 @@ export function EsbocoListShell({esbocos}: EsbocoListShellProps) {
         eyebrow="Esboços bíblicos"
         title="Esboços bíblicos para pregação e estudo"
         description="Uma biblioteca editorial de esboços bíblicos organizada para apoiar ensino, pregação e estudo das Escrituras com clareza, estrutura e fidelidade."
+        titleNoWrap
         actions={[
           {label: 'Voltar para Home', href: '/'},
           {label: 'Buscar conteúdos', href: '/busca'},

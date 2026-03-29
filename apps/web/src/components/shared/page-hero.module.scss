@@ -48,3 +48,9 @@
   color: var(--color-ink-900);
   border-color: var(--color-ink-900);
 }
+
+@media (min-width: 64rem) {
+  .titleNoWrap {
+    white-space: nowrap;
+  }
+}

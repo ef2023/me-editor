@@ -31,6 +31,18 @@ export const esbocosSectionType = defineType({
       of: [defineArrayMember({type: 'esbocoHomeItem'})],
       validation: (rule) => rule.min(1).max(6),
     }),
+    defineField({
+      name: 'buttonLabel',
+      title: 'Texto do botão',
+      type: 'string',
+      initialValue: 'Ver todos os esboços',
+    }),
+    defineField({
+      name: 'buttonHref',
+      title: 'Link do botão',
+      type: 'string',
+      initialValue: '/esbocos',
+    }),
   ],
   preview: {
     select: {

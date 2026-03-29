@@ -279,6 +279,20 @@ async function renderSection(
                 )
               })}
             </div>
+
+            {section.buttonLabel && section.buttonHref ? (
+              <div className={styles.blockFooter}>
+                <TrackedLink
+                  href={section.buttonHref}
+                  className={styles.primaryAction}
+                  eventName="editorial_block_click"
+                  section={section._key}
+                  label={section.buttonLabel}
+                >
+                  {section.buttonLabel}
+                </TrackedLink>
+              </div>
+            ) : null}
           </div>
         </section>
       )

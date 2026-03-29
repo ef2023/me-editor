@@ -11,15 +11,26 @@ type PageHeroProps = {
   title: string;
   description: string;
   actions?: HeroAction[];
+  titleNoWrap?: boolean;
 };
 
-export function PageHero({eyebrow, title, description, actions = []}: PageHeroProps) {
+export function PageHero({
+  eyebrow,
+  title,
+  description,
+  actions = [],
+  titleNoWrap = false,
+}: PageHeroProps) {
+  const titleClassName = titleNoWrap
+    ? `${styles.title} ${styles.titleNoWrap}`
+    : styles.title;
+
   return (
     <section className={styles.hero}>
       <div className="container">
         <div className={styles.surface}>
           <p className="eyebrow">{eyebrow}</p>
-          <h1 className={styles.title}>{title}</h1>
+          <h1 className={titleClassName}>{title}</h1>
           <p className={styles.description}>{description}</p>
 
           {actions.length > 0 ? (

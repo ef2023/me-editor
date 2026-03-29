@@ -198,7 +198,7 @@
 }
 
 .blockHeadTitle {
-  max-width: 30ch;
+  max-width: 100%;
   font-size: clamp(1.7rem, 3vw, 2.6rem);
   line-height: 1.06;
   letter-spacing: -0.02em;
@@ -208,6 +208,13 @@
   max-width: none;
   text-wrap: normal;
 }
+
+@media (min-width: 64rem) {
+  .esbocosSectionTitle {
+    white-space: nowrap;
+  }
+}
+
 
 .blockFooter {
   display: flex;
@@ -331,12 +338,5 @@
   .categoryGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 2rem;
-  }
-}
-
-
-@media (min-width: 64rem) {
-  .esbocosSectionTitle {
-    white-space: nowrap;
   }
 }

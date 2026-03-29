@@ -1,8 +1,8 @@
-import {SanityImage} from '@/components/media/sanity-image'
-import {TrackedLink} from '@/components/analytics/tracked-link'
-import {NewsletterInlineForm} from '@/components/newsletter/newsletter-inline-form'
-import {getCategories, getHomePage, type HomeSection} from '@/lib/content-source'
-import {formatDate} from '@/lib/content-source'
+import { SanityImage } from '@/components/media/sanity-image'
+import { TrackedLink } from '@/components/analytics/tracked-link'
+import { NewsletterInlineForm } from '@/components/newsletter/newsletter-inline-form'
+import { getCategories, getHomePage, type HomeSection } from '@/lib/content-source'
+import { formatDate } from '@/lib/content-source'
 import styles from './home-sections.module.scss'
 
 type NewsletterStatus = 'pending' | 'confirmed' | 'invalid' | 'error' | undefined
@@ -136,7 +136,11 @@ async function renderSection(
           <div className="container">
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
-              {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
+              {section.title ? (
+                <h2 className={`${styles.blockHeadTitle} ${styles.esbocosSectionTitle}`}>
+                  {section.title}
+                </h2>
+              ) : null}
               {section.description ? (
                 <p className={styles.blockHeadDescription}>{section.description}</p>
               ) : null}
@@ -386,8 +390,8 @@ async function renderSection(
               ) : null}
 
               {!section.showNewsletterForm &&
-              section.buttonLabel &&
-              section.buttonHref ? (
+                section.buttonLabel &&
+                section.buttonHref ? (
                 <TrackedLink
                   href={section.buttonHref}
                   className={styles.primaryAction}

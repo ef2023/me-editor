@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {PortableText} from '@portabletext/react';
 import type {PortableTextBlock} from '@portabletext/types';
 import {ContinueReading} from '@/components/article/continue-reading';
+import {ArticleShare} from '@/components/article/article-share';
 import {SanityImage} from '@/components/media/sanity-image';
 import {Breadcrumbs} from '@/components/navigation/breadcrumbs';
 import type {CmsArticlePost} from '@/lib/content-source';
@@ -21,6 +22,11 @@ export function ArticleShell({category, post, relatedPosts}: ArticleShellProps) 
     : [];
 
   const hasPortableBody = portableBody.length > 0;
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
+  const postUrl = new URL(`/${category.slug}/${post.slug}`, siteUrl).toString();
 
   return (
     <section className="section-tight">
@@ -68,6 +74,8 @@ export function ArticleShell({category, post, relatedPosts}: ArticleShellProps) 
                 />
               </div>
             ) : null}
+
+            <ArticleShare title={post.title} url={postUrl} />
           </header>
 
           <div className={styles.layout}>

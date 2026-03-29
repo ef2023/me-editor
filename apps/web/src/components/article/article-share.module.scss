@@ -1,0 +1,71 @@
+.share {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.label {
+  color: var(--color-ink-600);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-size: 0.94rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.whatsapp {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+}
+
+.facebook {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #fff;
+}
+
+.x {
+  background: #111827;
+  border-color: #111827;
+  color: #fff;
+}
+
+.telegram {
+  background: #229ed9;
+  border-color: #229ed9;
+  color: #fff;
+}
+
+.copy {
+  background: transparent;
+  color: var(--color-ink-900);
+}

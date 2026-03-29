@@ -1,6 +1,7 @@
 import type {MetadataRoute} from 'next';
 import {
   getAllAuthors,
+  getAllEsbocos,
   getAllPosts,
   getCategories,
 } from '@/lib/content-source';
@@ -13,13 +14,15 @@ const legalPaths = [
   '/politica-de-cookies',
   '/termos-de-uso',
   '/aviso-editorial',
+  '/esbocos',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, posts, authors] = await Promise.all([
+  const [categories, posts, authors, esbocos] = await Promise.all([
     getCategories(),
     getAllPosts(),
     getAllAuthors(),
+    getAllEsbocos(),
   ]);
 
   const baseEntries: MetadataRoute.Sitemap = [
@@ -33,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteConfig.url}${path}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
-      priority: 0.5,
+      priority: path === '/esbocos' ? 0.7 : 0.5,
     })),
   ];
 
@@ -58,5 +61,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...baseEntries, ...categoryEntries, ...authorEntries, ...postEntries];
+  const esbocoEntries: MetadataRoute.Sitemap = esbocos.map((esboco) => ({
+    url: `${siteConfig.url}/esbocos/${esboco.slug}`,
+    lastModified: new Date(`${esboco.updatedAt}T00:00:00`),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }));
+
+  return [
+    ...baseEntries,
+    ...categoryEntries,
+    ...authorEntries,
+    ...postEntries,
+    ...esbocoEntries,
+  ];
 }

@@ -13,6 +13,7 @@ export const homePageType = defineType({
         defineArrayMember({type: 'heroSection'}),
         defineArrayMember({type: 'curatedPostsSection'}),
         defineArrayMember({type: 'readingPathsSection'}),
+        defineArrayMember({type: 'esbocosSection'}),
         defineArrayMember({type: 'principlesSection'}),
         defineArrayMember({type: 'categoryGridSection'}),
         defineArrayMember({type: 'ctaBanner'}),

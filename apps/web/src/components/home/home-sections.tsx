@@ -232,6 +232,57 @@ async function renderSection(
         </section>
       )
 
+    case 'esbocosSection':
+      return (
+        <section key={section._key} className={styles.section}>
+          <div className="container">
+            <div className={styles.blockHead}>
+              {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
+              {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
+              {section.description ? (
+                <p className={styles.blockHeadDescription}>{section.description}</p>
+              ) : null}
+            </div>
+
+            <div className={styles.listGrid}>
+              {section.items.map((item, index) => {
+                const esboco = item.esboco
+                const title = item.title ?? esboco?.title
+                const description = item.description ?? esboco?.excerpt
+                const href = esboco ? `/esbocos/${esboco.slug}` : '#'
+
+                return (
+                  <article key={`${section._key}-${index}`} className={styles.listItem}>
+                    <span className={styles.listStep}>
+                      {item.step ?? String(index + 1).padStart(2, '0')}
+                    </span>
+
+                    <div className={styles.listCopy}>
+                      <h3 className={styles.listTitle}>
+                        {esboco ? (
+                          <TrackedLink
+                            href={href}
+                            eventName="editorial_block_click"
+                            section={section._key}
+                            label={title}
+                          >
+                            {title}
+                          </TrackedLink>
+                        ) : (
+                          title
+                        )}
+                      </h3>
+
+                      {description ? <p>{description}</p> : null}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )
+
     case 'principlesSection':
       return (
         <section key={section._key} className={styles.section}>

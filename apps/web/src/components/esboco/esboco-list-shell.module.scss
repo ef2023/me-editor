@@ -1,0 +1,66 @@
+﻿.grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.eyebrow {
+  color: var(--color-ink-600);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(1.15rem, 2.1vw, 1.35rem);
+  line-height: 1.18;
+}
+
+.titleLink {
+  color: var(--color-ink-900);
+}
+
+.titleLink:hover {
+  color: var(--color-accent-700);
+}
+
+.bibleText {
+  color: var(--color-ink-600);
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.excerpt {
+  max-width: 60ch;
+  color: var(--color-ink-700);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  color: var(--color-ink-600);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.emptyState {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+@media (min-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}

@@ -13,9 +13,11 @@ import {hasSanityEnv} from '@/lib/sanity/env';
 import {
   allAuthorsQuery,
   allCategoriesQuery,
+  allEsbocosQuery,
   allPostsQuery,
   authorBySlugQuery,
   categoryBySlugQuery,
+  esbocoBySlugQuery,
   homePageQuery,
   legalPageBySlugQuery,
   newsletterPendingByEmailQuery,
@@ -70,6 +72,24 @@ export type CmsArticlePost = ArticlePost & {
   featured?: boolean;
   author?: CmsAuthor;
   coverImage?: SanityImageValue;
+};
+
+export type CmsEsboco = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  eyebrow: string;
+  pillar: string;
+  bibleText?: string;
+  readingTime: string;
+  publishedAt: string;
+  updatedAt: string;
+  tags: string[];
+  body?: PortableBlock[];
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SanityImageValue;
+  author?: CmsAuthor;
 };
 
 export type ModularSection =
@@ -154,6 +174,26 @@ type SanityPost = {
   body?: PortableBlock[];
   coverImage?: SanityImageValue;
   categorySlug: string;
+  author?: SanityAuthor;
+};
+
+type SanityEsboco = {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  eyebrow?: string;
+  pillar?: string;
+  bibleText?: string;
+  readingTime?: number | string;
+  publishedAt?: string;
+  updatedAt?: string;
+  tags?: string[];
+  seo?: {
+    title?: string;
+    description?: string;
+    image?: SanityImageValue;
+  };
+  body?: PortableBlock[];
   author?: SanityAuthor;
 };
 
@@ -243,8 +283,10 @@ type SanityHomeSection = {
     post?: SanityPost;
   }>;
   items?: Array<{
+    step?: string;
     title?: string;
     description?: string;
+    esboco?: SanityEsboco;
   }>;
 };
 
@@ -284,6 +326,19 @@ export type HomeSection =
         title?: string;
         description?: string;
         post?: CmsArticlePost;
+      }>;
+    }
+  | {
+      _type: 'esbocosSection';
+      _key: string;
+      eyebrow?: string;
+      title?: string;
+      description?: string;
+      items: Array<{
+        step?: string;
+        title?: string;
+        description?: string;
+        esboco?: CmsEsboco;
       }>;
     }
   | {
@@ -423,6 +478,26 @@ function mapPost(post: SanityPost): CmsArticlePost {
     featured: post.featured ?? false,
     author: mapAuthor(post.author) ?? fallbackAuthor,
     coverImage: post.coverImage,
+  };
+}
+
+function mapEsboco(esboco: SanityEsboco): CmsEsboco {
+  return {
+    title: esboco.title,
+    slug: esboco.slug,
+    excerpt: esboco.excerpt ?? '',
+    eyebrow: esboco.eyebrow ?? 'Esboço bíblico',
+    pillar: esboco.pillar ?? 'Esboços bíblicos',
+    bibleText: esboco.bibleText,
+    readingTime: normalizeReadingTime(esboco.readingTime),
+    publishedAt: normalizeDate(esboco.publishedAt),
+    updatedAt: normalizeDate(esboco.updatedAt ?? esboco.publishedAt),
+    tags: esboco.tags ?? [],
+    body: esboco.body ?? [],
+    seoTitle: esboco.seo?.title,
+    seoDescription: esboco.seo?.description,
+    seoImage: esboco.seo?.image,
+    author: mapAuthor(esboco.author) ?? fallbackAuthor,
   };
 }
 
@@ -599,7 +674,7 @@ export async function getHomePage(): Promise<HomePageContent> {
 
   const {data} = await sanityFetch<SanityHomePage | null>({
     query: homePageQuery,
-    tags: ['homePage', 'post', 'category', 'author'],
+    tags: ['homePage', 'post', 'category', 'author', 'esboco'],
     revalidate: 60,
   });
 
@@ -645,6 +720,20 @@ export async function getHomePage(): Promise<HomePageContent> {
             post: item.post ? mapPost(item.post) : undefined,
           })),
         };
+      case 'esbocosSection':
+        return {
+          _type: 'esbocosSection',
+          _key: section._key,
+          eyebrow: section.eyebrow,
+          title: section.title,
+          description: section.description,
+          items: (section.items ?? []).map((item) => ({
+            step: item.step,
+            title: item.title,
+            description: item.description,
+            esboco: item.esboco ? mapEsboco(item.esboco) : undefined,
+          })),
+        };
       case 'principlesSection':
         return {
           _type: 'principlesSection',
@@ -652,7 +741,10 @@ export async function getHomePage(): Promise<HomePageContent> {
           eyebrow: section.eyebrow,
           title: section.title,
           description: section.description,
-          items: section.items ?? [],
+          items: (section.items ?? []).map((item) => ({
+            title: item.title,
+            description: item.description,
+          })),
         };
       case 'categoryGridSection':
         return {
@@ -859,6 +951,45 @@ export async function getAllPosts(): Promise<CmsArticlePost[]> {
   }
 
   return data.map(mapPost);
+}
+
+export async function getAllEsbocos(): Promise<CmsEsboco[]> {
+  if (!hasSanityEnv) {
+    return [];
+  }
+
+  const {data} = await sanityFetch<SanityEsboco[]>({
+    query: allEsbocosQuery,
+    tags: ['esboco', 'author'],
+    revalidate: 60,
+  });
+
+  if (!data.length) {
+    return [];
+  }
+
+  return data.map(mapEsboco);
+}
+
+export async function getEsbocoBySlug(
+  slug: string,
+): Promise<CmsEsboco | undefined> {
+  if (!hasSanityEnv) {
+    return undefined;
+  }
+
+  const {data} = await sanityFetch<SanityEsboco | null>({
+    query: esbocoBySlugQuery,
+    params: {slug},
+    tags: ['esboco', 'author'],
+    revalidate: 60,
+  });
+
+  if (!data) {
+    return undefined;
+  }
+
+  return mapEsboco(data);
 }
 
 export async function getPostsByAuthor(

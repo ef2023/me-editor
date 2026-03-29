@@ -60,6 +60,23 @@ const POST_FIELDS = `
   "author": author->${AUTHOR_FIELDS}
 `;
 
+const ESBOCO_FIELDS = `
+  _id,
+  title,
+  "slug": slug.current,
+  excerpt,
+  eyebrow,
+  pillar,
+  bibleText,
+  readingTime,
+  "publishedAt": coalesce(publishedAt, _createdAt),
+  "updatedAt": coalesce(updatedAt, _updatedAt),
+  tags,
+  seo ${SEO_FIELDS},
+  body,
+  "author": author->${AUTHOR_FIELDS}
+`;
+
 const CATEGORY_FIELDS = `
   _id,
   title,
@@ -105,6 +122,19 @@ export const allPostsQuery = defineQuery(`
   *[_type == "post" && defined(slug.current) && defined(category->slug.current)]
   | order(featured desc, publishedAt desc, _updatedAt desc){
     ${POST_FIELDS}
+  }
+`);
+
+export const allEsbocosQuery = defineQuery(`
+  *[_type == "esboco" && defined(slug.current)]
+  | order(publishedAt desc, _updatedAt desc){
+    ${ESBOCO_FIELDS}
+  }
+`);
+
+export const esbocoBySlugQuery = defineQuery(`
+  *[_type == "esboco" && slug.current == $slug][0]{
+    ${ESBOCO_FIELDS}
   }
 `);
 
@@ -264,8 +294,12 @@ export const homePageQuery = defineQuery(`
         }
       },
       "items": items[]{
+        step,
         title,
-        description
+        description,
+        "esboco": esboco->{
+          ${ESBOCO_FIELDS}
+        }
       }
     }
   }

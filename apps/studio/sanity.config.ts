@@ -1,17 +1,18 @@
-import {defineConfig} from 'sanity'
-import {visionTool} from '@sanity/vision'
-import {presentationTool} from 'sanity/presentation'
-import {structureTool} from 'sanity/structure'
-import {structure} from './structure'
-import {resolve} from './presentation/resolve'
-import {schemaTypes} from './schemaTypes'
+import { defineConfig } from 'sanity';
+import { visionTool } from '@sanity/vision';
+import { presentationTool } from 'sanity/presentation';
+import { structureTool } from 'sanity/structure';
+import { structure } from './structure';
+import { resolve } from './presentation/resolve';
+import { schemaTypes } from './schemaTypes';
+import { vercelAnalyticsPlugin } from './plugins/vercelAnalytics';
 
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'g6fc3waj'
-const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'g6fc3waj';
+const dataset = process.env.SANITY_STUDIO_DATASET || 'production';
 const previewOrigin =
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://misterio-do-evangelho-web.vercel.app'
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://misterio-do-evangelho-web.vercel.app';
 
-const singletonTypes = new Set(['siteSettings', 'homePage'])
+const singletonTypes = new Set(['siteSettings', 'homePage']);
 
 export default defineConfig({
   name: 'default',
@@ -34,23 +35,22 @@ export default defineConfig({
       allowOrigins: [previewOrigin],
     }),
     visionTool(),
+    vercelAnalyticsPlugin(),
   ],
   schema: {
     types: schemaTypes,
   },
   document: {
-    newDocumentOptions: (prev, {creationContext}) => {
+    newDocumentOptions: (prev, { creationContext }) => {
       if (creationContext.type !== 'global') {
-        return prev
+        return prev;
       }
 
-      return prev.filter(
-        (templateItem) => !singletonTypes.has(templateItem.templateId),
-      )
+      return prev.filter((templateItem) => !singletonTypes.has(templateItem.templateId));
     },
     actions: (prev, context) => {
       if (!singletonTypes.has(context.schemaType)) {
-        return prev
+        return prev;
       }
 
       return prev.filter(
@@ -58,7 +58,7 @@ export default defineConfig({
           action.action !== 'duplicate' &&
           action.action !== 'delete' &&
           action.action !== 'unpublish',
-      )
+      );
     },
   },
-})
+});

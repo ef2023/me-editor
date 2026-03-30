@@ -136,11 +136,7 @@ async function renderSection(
           <div className="container">
             <div className={styles.blockHead}>
               {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
-              {section.title ? (
-                <h2 className={`${styles.blockHeadTitle} ${styles.esbocosSectionTitle}`}>
-                  {section.title}
-                </h2>
-              ) : null}
+              {section.title ? <h2 className={styles.blockHeadTitle}>{section.title}</h2> : null}
               {section.description ? (
                 <p className={styles.blockHeadDescription}>{section.description}</p>
               ) : null}
@@ -190,6 +186,20 @@ async function renderSection(
                 </article>
               ))}
             </div>
+
+            {section.buttonLabel && section.buttonHref ? (
+              <div className={styles.blockFooter}>
+                <TrackedLink
+                  href={section.buttonHref}
+                  className={styles.primaryAction}
+                  eventName="editorial_block_click"
+                  section={section._key}
+                  label={section.buttonLabel}
+                >
+                  {section.buttonLabel}
+                </TrackedLink>
+              </div>
+            ) : null}
           </div>
         </section>
       )

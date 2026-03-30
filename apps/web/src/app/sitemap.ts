@@ -15,6 +15,7 @@ const legalPaths = [
   '/termos-de-uso',
   '/aviso-editorial',
   '/esbocos',
+  '/posts',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -36,7 +37,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteConfig.url}${path}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
-      priority: path === '/esbocos' ? 0.7 : 0.5,
+      priority:
+        path === '/esbocos' || path === '/posts'
+          ? 0.7
+          : 0.5,
     })),
   ];
 

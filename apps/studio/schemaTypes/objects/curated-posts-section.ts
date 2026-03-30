@@ -1,4 +1,4 @@
-import {defineArrayMember, defineField, defineType} from 'sanity';
+import {defineField, defineType} from 'sanity';
 
 export const curatedPostsSectionType = defineType({
   name: 'curatedPostsSection',
@@ -9,7 +9,7 @@ export const curatedPostsSectionType = defineType({
       name: 'eyebrow',
       title: 'Eyebrow',
       type: 'string',
-      initialValue: 'Destaques editoriais',
+      initialValue: 'Comece por aqui',
     }),
     defineField({
       name: 'title',
@@ -28,13 +28,20 @@ export const curatedPostsSectionType = defineType({
       name: 'posts',
       title: 'Posts',
       type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'reference',
-          to: [{type: 'post'}],
-        }),
-      ],
+      of: [{type: 'reference', to: [{type: 'post'}]}],
       validation: (rule) => rule.min(1).max(6),
+    }),
+    defineField({
+      name: 'buttonLabel',
+      title: 'Texto do botão',
+      type: 'string',
+      initialValue: 'Ver todos os posts',
+    }),
+    defineField({
+      name: 'buttonHref',
+      title: 'Link do botão',
+      type: 'string',
+      initialValue: '/posts',
     }),
   ],
   preview: {

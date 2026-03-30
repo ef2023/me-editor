@@ -31,9 +31,12 @@ import {
   siteSettingsQuery,
 } from '@/lib/sanity/queries';
 
+
 import type {PortableTextBlock} from '@portabletext/types';
 
+
 type PortableBlock = PortableTextBlock;
+
 
 export type SanityImageValue = {
   alt?: string;
@@ -53,6 +56,7 @@ export type SanityImageValue = {
   };
 };
 
+
 export type CmsAuthor = {
   name: string;
   slug: string;
@@ -64,6 +68,7 @@ export type CmsAuthor = {
   image?: SanityImageValue;
 };
 
+
 export type CmsArticlePost = ArticlePost & {
   body?: PortableBlock[];
   seoTitle?: string;
@@ -73,6 +78,7 @@ export type CmsArticlePost = ArticlePost & {
   author?: CmsAuthor;
   coverImage?: SanityImageValue;
 };
+
 
 export type CmsEsboco = {
   title: string;
@@ -91,6 +97,7 @@ export type CmsEsboco = {
   seoImage?: SanityImageValue;
   author?: CmsAuthor;
 };
+
 
 export type ModularSection =
   | {
@@ -113,6 +120,8 @@ export type ModularSection =
       eyebrow?: string;
       title?: string;
       description?: string;
+      buttonLabel?: string;
+      buttonHref?: string;
       posts: CmsArticlePost[];
     }
   | {
@@ -127,6 +136,7 @@ export type ModularSection =
       successMessage?: string;
     };
 
+
 export type CmsCategory = SiteCategory & {
   heroTitle?: string;
   heroDescription?: string;
@@ -136,6 +146,7 @@ export type CmsCategory = SiteCategory & {
   sections?: ModularSection[];
 };
 
+
 export type CmsLegalPage = Omit<StaticPageContent, 'sections'> & {
   body?: PortableBlock[];
   sections?: ModularSection[];
@@ -143,6 +154,7 @@ export type CmsLegalPage = Omit<StaticPageContent, 'sections'> & {
   seoDescription?: string;
   seoImage?: SanityImageValue;
 };
+
 
 type SanityAuthor = {
   name: string;
@@ -154,6 +166,7 @@ type SanityAuthor = {
   links?: Array<{label: string; href: string}>;
   image?: SanityImageValue;
 };
+
 
 type SanityPost = {
   title: string;
@@ -177,6 +190,7 @@ type SanityPost = {
   author?: SanityAuthor;
 };
 
+
 type SanityEsboco = {
   title: string;
   slug: string;
@@ -196,6 +210,7 @@ type SanityEsboco = {
   body?: PortableBlock[];
   author?: SanityAuthor;
 };
+
 
 type SanityCategory = {
   title: string;
@@ -225,6 +240,7 @@ type SanityCategory = {
   }>;
 };
 
+
 type SanityLegalPage = {
   title?: string;
   eyebrow?: string;
@@ -249,6 +265,7 @@ type SanityLegalPage = {
   }>;
 };
 
+
 type SanitySiteSettings = {
   siteTitle?: string;
   tagline?: string;
@@ -257,6 +274,7 @@ type SanitySiteSettings = {
   heroDescription?: string;
   footerDescription?: string;
 };
+
 
 type SanityHomeSection = {
   _type: string;
@@ -290,9 +308,11 @@ type SanityHomeSection = {
   }>;
 };
 
+
 type SanityHomePage = {
   sections?: SanityHomeSection[];
 };
+
 
 export type HomeSection =
   | {
@@ -313,6 +333,8 @@ export type HomeSection =
       eyebrow?: string;
       title?: string;
       description?: string;
+      buttonLabel?: string;
+      buttonHref?: string;
       posts: CmsArticlePost[];
     }
   | {
@@ -375,9 +397,11 @@ export type HomeSection =
       successMessage?: string;
     };
 
+
 export type HomePageContent = {
   sections: HomeSection[];
 };
+
 
 export type CategoryListingResult = {
   category?: CmsCategory;
@@ -388,6 +412,7 @@ export type CategoryListingResult = {
   totalPages: number;
 };
 
+
 export type SearchPageResult = {
   items: CmsArticlePost[];
   total: number;
@@ -395,6 +420,7 @@ export type SearchPageResult = {
   pageSize: number;
   totalPages: number;
 };
+
 
 export type SiteSettings = {
   siteTitle: string;
@@ -405,6 +431,7 @@ export type SiteSettings = {
   footerDescription: string;
 };
 
+
 const fallbackAuthor: CmsAuthor = {
   name: 'Equipe editorial',
   slug: 'equipe-editorial',
@@ -414,6 +441,7 @@ const fallbackAuthor: CmsAuthor = {
   expertise: ['Editorial'],
   links: [],
 };
+
 
 const fallbackSiteSettings: SiteSettings = {
   siteTitle: siteConfig.name,
@@ -426,26 +454,32 @@ const fallbackSiteSettings: SiteSettings = {
     'Portal cristão de explicação bíblica, formação cristã prática e interpretação responsável.',
 };
 
+
 function normalizeDate(value?: string) {
   return (value ?? new Date().toISOString()).slice(0, 10);
 }
+
 
 function normalizeReadingTime(value?: number | string) {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return `${value} min de leitura`;
   }
 
+
   if (typeof value === 'string' && value.trim().length > 0) {
     return value;
   }
 
+
   return '6 min de leitura';
 }
+
 
 function mapAuthor(author?: SanityAuthor): CmsAuthor | undefined {
   if (!author?.slug) {
     return undefined;
   }
+
 
   return {
     name: author.name,
@@ -458,6 +492,7 @@ function mapAuthor(author?: SanityAuthor): CmsAuthor | undefined {
     image: author.image,
   };
 }
+
 
 function mapPost(post: SanityPost): CmsArticlePost {
   return {
@@ -483,6 +518,7 @@ function mapPost(post: SanityPost): CmsArticlePost {
   };
 }
 
+
 function mapEsboco(esboco: SanityEsboco): CmsEsboco {
   return {
     title: esboco.title,
@@ -503,6 +539,7 @@ function mapEsboco(esboco: SanityEsboco): CmsEsboco {
   };
 }
 
+
 function mapLocalPost(post: ArticlePost): CmsArticlePost {
   return {
     ...post,
@@ -515,6 +552,7 @@ function mapLocalPost(post: ArticlePost): CmsArticlePost {
     coverImage: undefined,
   };
 }
+
 
 function mapModularSections(
   sections:
@@ -559,6 +597,8 @@ function mapModularSections(
           eyebrow: section.eyebrow,
           title: section.title,
           description: section.description,
+          buttonLabel: section.buttonLabel,
+          buttonHref: section.buttonHref,
           posts: (section.posts ?? []).map(mapPost),
         };
       case 'ctaBanner':
@@ -578,6 +618,7 @@ function mapModularSections(
   });
 }
 
+
 function mapCategory(category: SanityCategory): CmsCategory {
   return {
     slug: category.slug,
@@ -593,10 +634,12 @@ function mapCategory(category: SanityCategory): CmsCategory {
   };
 }
 
+
 export async function getSiteSettings(): Promise<SiteSettings> {
   if (!hasSanityEnv) {
     return fallbackSiteSettings;
   }
+
 
   const {data} = await sanityFetch<SanitySiteSettings | null>({
     query: siteSettingsQuery,
@@ -604,9 +647,11 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     revalidate: 60,
   });
 
+
   if (!data) {
     return fallbackSiteSettings;
   }
+
 
   return {
     siteTitle: data.siteTitle ?? fallbackSiteSettings.siteTitle,
@@ -619,12 +664,14 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   };
 }
 
+
 export async function getHomePage(): Promise<HomePageContent> {
   const fallbackPosts = getLocalAllPosts().map(mapLocalPost);
   const fallbackCategories = getLocalCategories().map((category) => ({
     ...category,
     sections: [],
   }));
+
 
   const fallback: HomePageContent = {
     sections: [
@@ -647,6 +694,8 @@ export async function getHomePage(): Promise<HomePageContent> {
         title: 'Os primeiros textos precisam orientar, não apenas ocupar espaço.',
         description:
           'Esta entrada inicial organiza a leitura do portal em torno do núcleo mais importante.',
+        buttonLabel: 'Ver todos os posts',
+        buttonHref: '/posts',
         posts: fallbackPosts.slice(0, 3),
       },
       {
@@ -670,9 +719,11 @@ export async function getHomePage(): Promise<HomePageContent> {
     ],
   };
 
+
   if (!hasSanityEnv) {
     return fallback;
   }
+
 
   const {data} = await sanityFetch<SanityHomePage | null>({
     query: homePageQuery,
@@ -680,9 +731,11 @@ export async function getHomePage(): Promise<HomePageContent> {
     revalidate: 60,
   });
 
+
   if (!data?.sections?.length) {
     return fallback;
   }
+
 
   const sections: HomeSection[] = data.sections.map((section) => {
     switch (section._type) {
@@ -706,6 +759,8 @@ export async function getHomePage(): Promise<HomePageContent> {
           eyebrow: section.eyebrow,
           title: section.title,
           description: section.description,
+          buttonLabel: section.buttonLabel,
+          buttonHref: section.buttonHref,
           posts: (section.posts ?? []).map(mapPost),
         };
       case 'readingPathsSection':
@@ -776,8 +831,10 @@ export async function getHomePage(): Promise<HomePageContent> {
     }
   });
 
+
   return {sections};
 }
+
 
 export async function getCategories(): Promise<CmsCategory[]> {
   if (!hasSanityEnv) {
@@ -787,11 +844,13 @@ export async function getCategories(): Promise<CmsCategory[]> {
     }));
   }
 
+
   const {data} = await sanityFetch<SanityCategory[]>({
     query: allCategoriesQuery,
     tags: ['category'],
     revalidate: 60,
   });
+
 
   if (!data.length) {
     return getLocalCategories().map((category) => ({
@@ -800,8 +859,10 @@ export async function getCategories(): Promise<CmsCategory[]> {
     }));
   }
 
+
   return data.map(mapCategory);
 }
+
 
 export async function getCategoryBySlug(
   slug: string,
@@ -816,12 +877,14 @@ export async function getCategoryBySlug(
       : undefined;
   }
 
+
   const {data} = await sanityFetch<SanityCategory | null>({
     query: categoryBySlugQuery,
     params: {slug},
     tags: ['category', 'post', 'author'],
     revalidate: 60,
   });
+
 
   if (!data) {
     const fallback = getLocalCategories().find((item) => item.slug === slug);
@@ -833,8 +896,10 @@ export async function getCategoryBySlug(
       : undefined;
   }
 
+
   return mapCategory(data);
 }
+
 
 export async function getCategoryListing(
   slug: string,
@@ -842,6 +907,7 @@ export async function getCategoryListing(
   pageSize = 9,
 ): Promise<CategoryListingResult> {
   const category = await getCategoryBySlug(slug);
+
 
   if (!category) {
     return {
@@ -854,14 +920,17 @@ export async function getCategoryListing(
     };
   }
 
+
   const currentPage = Number.isFinite(page) && page > 0 ? page : 1;
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize;
+
 
   if (!hasSanityEnv) {
     const items = getLocalAllPosts()
       .map(mapLocalPost)
       .filter((post) => post.categorySlug === slug);
+
 
     return {
       category,
@@ -872,6 +941,7 @@ export async function getCategoryListing(
       totalPages: Math.ceil(items.length / pageSize),
     };
   }
+
 
   const [{data: posts}, {data: total}] = await Promise.all([
     sanityFetch<SanityPost[]>({
@@ -888,6 +958,7 @@ export async function getCategoryListing(
     }),
   ]);
 
+
   return {
     category,
     posts: posts.map(mapPost),
@@ -898,10 +969,12 @@ export async function getCategoryListing(
   };
 }
 
+
 export async function getAllAuthors(): Promise<CmsAuthor[]> {
   if (!hasSanityEnv) {
     return [fallbackAuthor];
   }
+
 
   const {data} = await sanityFetch<SanityAuthor[]>({
     query: allAuthorsQuery,
@@ -909,14 +982,17 @@ export async function getAllAuthors(): Promise<CmsAuthor[]> {
     revalidate: 60,
   });
 
+
   if (!data.length) {
     return [fallbackAuthor];
   }
+
 
   return data
     .map(mapAuthor)
     .filter((author): author is CmsAuthor => Boolean(author));
 }
+
 
 export async function getAuthorBySlug(
   slug: string,
@@ -925,6 +1001,7 @@ export async function getAuthorBySlug(
     return slug === fallbackAuthor.slug ? fallbackAuthor : undefined;
   }
 
+
   const {data} = await sanityFetch<SanityAuthor | null>({
     query: authorBySlugQuery,
     params: {slug},
@@ -932,17 +1009,21 @@ export async function getAuthorBySlug(
     revalidate: 60,
   });
 
+
   if (!data) {
     return slug === fallbackAuthor.slug ? fallbackAuthor : undefined;
   }
 
+
   return mapAuthor(data);
 }
+
 
 export async function getAllPosts(): Promise<CmsArticlePost[]> {
   if (!hasSanityEnv) {
     return getLocalAllPosts().map(mapLocalPost);
   }
+
 
   const {data} = await sanityFetch<SanityPost[]>({
     query: allPostsQuery,
@@ -950,17 +1031,21 @@ export async function getAllPosts(): Promise<CmsArticlePost[]> {
     revalidate: 60,
   });
 
+
   if (!data.length) {
     return getLocalAllPosts().map(mapLocalPost);
   }
 
+
   return data.map(mapPost);
 }
+
 
 export async function getAllEsbocos(): Promise<CmsEsboco[]> {
   if (!hasSanityEnv) {
     return [];
   }
+
 
   const {data} = await sanityFetch<SanityEsboco[]>({
     query: allEsbocosQuery,
@@ -968,12 +1053,15 @@ export async function getAllEsbocos(): Promise<CmsEsboco[]> {
     revalidate: 60,
   });
 
+
   if (!data.length) {
     return [];
   }
 
+
   return data.map(mapEsboco);
 }
+
 
 export async function getEsbocoBySlug(
   slug: string,
@@ -982,6 +1070,7 @@ export async function getEsbocoBySlug(
     return undefined;
   }
 
+
   const {data} = await sanityFetch<SanityEsboco | null>({
     query: esbocoBySlugQuery,
     params: {slug},
@@ -989,12 +1078,15 @@ export async function getEsbocoBySlug(
     revalidate: 60,
   });
 
+
   if (!data) {
     return undefined;
   }
 
+
   return mapEsboco(data);
 }
+
 
 export async function getPostsByAuthor(
   slug: string,
@@ -1005,6 +1097,7 @@ export async function getPostsByAuthor(
       : [];
   }
 
+
   const {data} = await sanityFetch<SanityPost[]>({
     query: postsByAuthorQuery,
     params: {slug},
@@ -1012,14 +1105,17 @@ export async function getPostsByAuthor(
     revalidate: 60,
   });
 
+
   if (!data.length) {
     return slug === fallbackAuthor.slug
       ? getLocalAllPosts().map(mapLocalPost)
       : [];
   }
 
+
   return data.map(mapPost);
 }
+
 
 export async function getSearchPage(
   term: string,
@@ -1027,6 +1123,7 @@ export async function getSearchPage(
   pageSize = 10,
 ): Promise<SearchPageResult> {
   const normalized = term.trim();
+
 
   if (!normalized) {
     return {
@@ -1038,9 +1135,11 @@ export async function getSearchPage(
     };
   }
 
+
   const currentPage = Number.isFinite(page) && page > 0 ? page : 1;
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize;
+
 
   if (!hasSanityEnv) {
     const items = getLocalAllPosts()
@@ -1052,6 +1151,7 @@ export async function getSearchPage(
           .includes(normalized.toLowerCase()),
       );
 
+
     return {
       items: items.slice(start, end),
       total: items.length,
@@ -1060,6 +1160,7 @@ export async function getSearchPage(
       totalPages: Math.ceil(items.length / pageSize),
     };
   }
+
 
   const [{data: items}, {data: total}] = await Promise.all([
     sanityFetch<SanityPost[]>({
@@ -1076,6 +1177,7 @@ export async function getSearchPage(
     }),
   ]);
 
+
   return {
     items: items.map(mapPost),
     total,
@@ -1085,6 +1187,7 @@ export async function getSearchPage(
   };
 }
 
+
 export async function getPostByCategoryAndSlug(
   categorySlug: string,
   slug: string,
@@ -1093,6 +1196,7 @@ export async function getPostByCategoryAndSlug(
     const fallback = getLocalPostByCategoryAndSlug(categorySlug, slug);
     return fallback ? mapLocalPost(fallback) : undefined;
   }
+
 
   const {data} = await sanityFetch<SanityPost | null>({
     query: postByCategoryAndSlugQuery,
@@ -1104,13 +1208,16 @@ export async function getPostByCategoryAndSlug(
     revalidate: 60,
   });
 
+
   if (!data) {
     const fallback = getLocalPostByCategoryAndSlug(categorySlug, slug);
     return fallback ? mapLocalPost(fallback) : undefined;
   }
 
+
   return mapPost(data);
 }
+
 
 export async function getRelatedPosts(
   post: CmsArticlePost,
@@ -1119,6 +1226,7 @@ export async function getRelatedPosts(
   if (!hasSanityEnv) {
     return getLocalRelatedPosts(post, limit).map(mapLocalPost);
   }
+
 
   const {data} = await sanityFetch<SanityPost[]>({
     query: relatedPostsQuery,
@@ -1131,15 +1239,19 @@ export async function getRelatedPosts(
     revalidate: 60,
   });
 
+
   if (!data.length) {
     return getLocalRelatedPosts(post, limit).map(mapLocalPost);
   }
 
+
   return data.map(mapPost);
 }
 
+
 export async function getLegalPageBySlug(slug: string): Promise<CmsLegalPage> {
   const fallback = staticPages[slug];
+
 
   if (!hasSanityEnv) {
     return {
@@ -1154,12 +1266,14 @@ export async function getLegalPageBySlug(slug: string): Promise<CmsLegalPage> {
     };
   }
 
+
   const {data} = await sanityFetch<SanityLegalPage | null>({
     query: legalPageBySlugQuery,
     params: {slug},
     tags: ['legalPage'],
     revalidate: 60,
   });
+
 
   if (!data) {
     return {
@@ -1174,6 +1288,7 @@ export async function getLegalPageBySlug(slug: string): Promise<CmsLegalPage> {
     };
   }
 
+
   return {
     eyebrow: data.eyebrow ?? fallback?.eyebrow ?? 'Institucional',
     title: data.title ?? fallback?.title ?? 'Página institucional',
@@ -1185,6 +1300,7 @@ export async function getLegalPageBySlug(slug: string): Promise<CmsLegalPage> {
     seoImage: data.seo?.image,
   };
 }
+
 
 export function formatDate(date: string) {
   return formatLocalDate(date);

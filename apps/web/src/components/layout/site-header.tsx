@@ -5,10 +5,6 @@ const navItems = [
   { label: 'Sobre', href: '/sobre' },
   { label: 'Esboços', href: '/esbocos' },
   { label: 'Contato', href: '/contato' },
-  {
-    label: 'Ver todos os posts',
-    href: '/posts',
-  },
 ];
 
 export function SiteHeader() {

@@ -29,11 +29,8 @@ function resolveAbsoluteImageUrl(url?: string) {
   return new URL(url, base).toString();
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const {category, slug} = await params;
-
   const post = await getPostByCategoryAndSlug(category, slug);
 
   if (!post) {
@@ -100,17 +97,13 @@ export default async function ArticlePage({params}: PageProps) {
     notFound();
   }
 
-  const relatedPosts = await getRelatedPosts(post, 3);
+  const relatedPosts = await getRelatedPosts(post, 4);
 
   return (
     <>
       <SiteHeader />
       <main>
-        <ArticleShell
-          category={category}
-          post={post}
-          relatedPosts={relatedPosts}
-        />
+        <ArticleShell category={category} post={post} relatedPosts={relatedPosts} />
       </main>
       <SiteFooter />
     </>

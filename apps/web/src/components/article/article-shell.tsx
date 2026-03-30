@@ -23,9 +23,7 @@ export function ArticleShell({category, post, relatedPosts}: ArticleShellProps) 
 
   const hasPortableBody = portableBody.length > 0;
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   const postUrl = new URL(`/${category.slug}/${post.slug}`, siteUrl).toString();
 
   return (

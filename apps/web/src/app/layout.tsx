@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import Script from 'next/script';
 import {draftMode} from 'next/headers';
 import {GoogleTagManager} from '@next/third-parties/google';
+import {Analytics} from '@vercel/analytics/next';
 import {SpeedInsights} from '@vercel/speed-insights/next';
 import {VisualEditing} from 'next-sanity/visual-editing';
 import {DisableDraftMode} from '@/components/preview/disable-draft-mode';
@@ -71,6 +72,7 @@ export default async function RootLayout({
         {children}
         <CookieConsentBanner />
         <SpeedInsights />
+        <Analytics />
         {isDraftMode ? (
           <>
             <VisualEditing />

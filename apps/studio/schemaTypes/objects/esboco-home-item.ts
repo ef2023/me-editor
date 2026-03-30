@@ -2,31 +2,31 @@ import {defineField, defineType} from 'sanity';
 
 export const esbocoHomeItemType = defineType({
   name: 'esbocoHomeItem',
-  title: 'Item de esboço',
+  title: 'Item de esboço da home',
   type: 'object',
   fields: [
     defineField({
       name: 'step',
-      title: 'Ordem / número',
+      title: 'Número/ordem',
       type: 'string',
-      description: 'Ex.: 01, 02, 03',
+      initialValue: '01',
     }),
     defineField({
       name: 'title',
-      title: 'Título de exibição (opcional)',
+      title: 'Título customizado',
       type: 'string',
-      description: 'Se vazio, o título do próprio esboço será usado.',
+      description: 'Opcional. Se vazio, usa o título do esboço.',
     }),
     defineField({
       name: 'description',
-      title: 'Descrição de exibição (opcional)',
+      title: 'Descrição customizada',
       type: 'text',
       rows: 3,
-      description: 'Se vazio, o resumo do esboço será usado.',
+      description: 'Opcional. Se vazio, usa o resumo do esboço.',
     }),
     defineField({
       name: 'esboco',
-      title: 'Esboço vinculado',
+      title: 'Esboço',
       type: 'reference',
       to: [{type: 'esboco'}],
       validation: (rule) => rule.required(),
@@ -35,13 +35,12 @@ export const esbocoHomeItemType = defineType({
   preview: {
     select: {
       title: 'title',
-      esbocoTitle: 'esboco.title',
-      subtitle: 'step',
+      step: 'step',
     },
     prepare(selection) {
       return {
-        title: selection.title || selection.esbocoTitle || 'Item de esboço',
-        subtitle: selection.subtitle ? `Ordem ${selection.subtitle}` : 'Sem ordem',
+        title: selection.title || 'Item de esboço',
+        subtitle: selection.step || 'Sem ordem',
       };
     },
   },

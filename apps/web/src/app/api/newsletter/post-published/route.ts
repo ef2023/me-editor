@@ -11,6 +11,7 @@ type WebhookPayload = {
 
 type NewsletterPostDoc = {
   _id: string;
+  _rev?: string;
   title: string;
   excerpt?: string;
   slug?: string;
@@ -21,6 +22,7 @@ type NewsletterPostDoc = {
     teaser?: string;
     sentAt?: string;
     broadcastId?: string;
+    processing?: boolean;
   };
 };
 
@@ -38,13 +40,11 @@ export async function POST(req: NextRequest) {
     const {isValidSignature, body} = await parseBody<WebhookPayload>(req, secret);
 
     if (!isValidSignature) {
-      return NextResponse.json(
-        {message: 'Invalid signature'},
-        {status: 401},
-      );
+      return NextResponse.json({message: 'Invalid signature'}, {status: 401});
     }
 
     if (body?._type !== 'post' || !body._id) {
+      console.info('Skipped newsletter webhook: invalid payload', {body});
       return NextResponse.json(
         {message: 'Skipped: not a valid post payload'},
         {status: 200},
@@ -56,7 +56,16 @@ export async function POST(req: NextRequest) {
       {id: body._id},
     );
 
-    if (!post || !post.slug || !post.categorySlug) {
+    if (
+      !post ||
+      typeof post.slug !== 'string' ||
+      !post.slug.trim() ||
+      typeof post.categorySlug !== 'string' ||
+      !post.categorySlug.trim()
+    ) {
+      console.info('Skipped newsletter webhook: post incomplete', {
+        postId: body._id,
+      });
       return NextResponse.json(
         {message: 'Skipped: post not found or incomplete'},
         {status: 200},
@@ -64,6 +73,9 @@ export async function POST(req: NextRequest) {
     }
 
     if (!post.newsletter?.sendOnPublish) {
+      console.info('Skipped newsletter webhook: sendOnPublish false', {
+        postId: post._id,
+      });
       return NextResponse.json(
         {message: 'Skipped: sendOnPublish is false'},
         {status: 200},
@@ -71,11 +83,32 @@ export async function POST(req: NextRequest) {
     }
 
     if (post.newsletter.sentAt || post.newsletter.broadcastId) {
+      console.info('Skipped newsletter webhook: already sent', {
+        postId: post._id,
+        sentAt: post.newsletter.sentAt,
+        broadcastId: post.newsletter.broadcastId,
+      });
       return NextResponse.json(
         {message: 'Skipped: newsletter already sent'},
         {status: 200},
       );
     }
+
+    if (post.newsletter.processing) {
+      console.info('Skipped newsletter webhook: already processing', {
+        postId: post._id,
+      });
+      return NextResponse.json(
+        {message: 'Skipped: newsletter already processing'},
+        {status: 200},
+      );
+    }
+
+    await writeClient
+      .patch(post._id)
+      .setIfMissing({newsletter: {}})
+      .set({'newsletter.processing': true})
+      .commit();
 
     const broadcastId = await sendNewPostBroadcast({
       title: post.title,
@@ -90,15 +123,11 @@ export async function POST(req: NextRequest) {
 
     await writeClient
       .patch(post._id)
+      .setIfMissing({newsletter: {}})
       .set({
-        newsletter: {
-          ...(post.newsletter ?? {}),
-          sendOnPublish: post.newsletter?.sendOnPublish ?? false,
-          subject: post.newsletter?.subject,
-          teaser: post.newsletter?.teaser,
-          sentAt: now,
-          broadcastId,
-        },
+        'newsletter.sentAt': now,
+        'newsletter.broadcastId': broadcastId,
+        'newsletter.processing': false,
       })
       .commit();
 
@@ -110,11 +139,13 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Newsletter post webhook failed:', error);
 
+    const message =
+      error instanceof Error ? error.message : 'Unexpected error';
+
     return NextResponse.json(
       {
         ok: false,
-        message:
-          error instanceof Error ? error.message : 'Unexpected error',
+        message,
       },
       {status: 500},
     );

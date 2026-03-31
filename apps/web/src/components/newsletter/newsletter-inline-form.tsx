@@ -11,6 +11,12 @@ type NewsletterInlineFormProps = {
   successMessage?: string;
 };
 
+type NewsletterResponse = {
+  ok?: boolean;
+  status?: 'pending' | 'invalid' | 'error';
+  message?: string;
+};
+
 export function NewsletterInlineForm({
   redirectTo = '/',
   source = 'home',
@@ -22,7 +28,6 @@ export function NewsletterInlineForm({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     setStatus('pending');
     setMessage('');
 
@@ -40,33 +45,29 @@ export function NewsletterInlineForm({
         },
       });
 
-      const data = (await response.json()) as {
-        ok?: boolean;
-        status?: 'pending' | 'invalid' | 'error';
-        message?: string;
-      };
+      let data: NewsletterResponse | null = null;
 
-      if (!response.ok || !data?.status) {
-        setStatus('error');
-        setMessage('Não foi possível processar sua inscrição agora.');
-        return;
+      try {
+        data = (await response.json()) as NewsletterResponse;
+      } catch {
+        data = null;
       }
 
-      if (data.status === 'pending') {
+      if (data?.status === 'pending') {
         setStatus('success');
         setMessage(data.message || successMessage);
         setEmail('');
         return;
       }
 
-      if (data.status === 'invalid') {
+      if (data?.status === 'invalid') {
         setStatus('invalid');
         setMessage(data.message || 'Digite um e-mail válido para continuar.');
         return;
       }
 
       setStatus('error');
-      setMessage(data.message || 'Não foi possível processar sua inscrição agora.');
+      setMessage(data?.message || 'Não foi possível processar sua inscrição agora.');
     } catch {
       setStatus('error');
       setMessage('Não foi possível processar sua inscrição agora.');
@@ -78,6 +79,7 @@ export function NewsletterInlineForm({
       <form onSubmit={handleSubmit} className={styles.newsletterForm}>
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <input type="hidden" name="source" value={source} />
+
         <input
           type="email"
           name="email"
@@ -88,6 +90,7 @@ export function NewsletterInlineForm({
           className={styles.newsletterInput}
           aria-label="Seu melhor e-mail"
         />
+
         <button
           type="submit"
           className={styles.newsletterButton}

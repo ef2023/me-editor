@@ -39,13 +39,11 @@ function redirectWithNewsletterStatus(
 ) {
   const redirectUrl = new URL(redirectTo || '/', baseUrl);
   redirectUrl.searchParams.set('newsletter', status);
-
   return NextResponse.redirect(redirectUrl, {status: 303});
 }
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-
   const email = normalizeEmail(String(formData.get('email') ?? ''));
   const redirectTo = String(formData.get('redirectTo') ?? '/');
   const source = String(formData.get('source') ?? 'home');
@@ -81,53 +79,66 @@ export async function POST(request: Request) {
     return redirectWithNewsletterStatus(baseUrl, redirectTo, 'error');
   }
 
-  const token = createNewsletterToken();
-  const tokenHash = hashValue(token);
-  const now = new Date();
-  const expiresAt = new Date(
-    now.getTime() + 1000 * 60 * 60 * 24,
-  ).toISOString();
-  const _id = buildPendingId(email);
+  try {
+    const token = createNewsletterToken();
+    const tokenHash = hashValue(token);
+    const now = new Date();
+    const expiresAt = new Date(
+      now.getTime() + 1000 * 60 * 60 * 24,
+    ).toISOString();
 
-  await writeClient.createOrReplace({
-    _id,
-    _type: 'newsletterPendingSubscriber',
-    email,
-    source,
-    status: 'pending',
-    tokenHash,
-    createdAt: now.toISOString(),
-    expiresAt,
-  });
+    const _id = buildPendingId(email);
 
-  const confirmUrl = new URL('/api/newsletter/confirm', baseUrl);
-  confirmUrl.searchParams.set('email', email);
-  confirmUrl.searchParams.set('token', token);
+    await writeClient.createOrReplace({
+      _id,
+      _type: 'newsletterPendingSubscriber',
+      email,
+      source,
+      status: 'pending',
+      tokenHash,
+      createdAt: now.toISOString(),
+      expiresAt,
+    });
 
-  await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL,
-    to: email,
-    subject: 'Confirme sua inscrição na newsletter',
-    html: `
-      <div style="font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#1d1d1d">
-        <h1 style="font-size:24px;margin-bottom:12px">Confirme sua inscrição</h1>
-        <p>Recebemos seu pedido para entrar na newsletter do Mistério do Evangelho.</p>
-        <p>
-          <a href="${confirmUrl}" style="display:inline-block;padding:12px 18px;background:#171717;color:#fff;text-decoration:none;border-radius:6px">
-            Confirmar inscrição
-          </a>
-        </p>
-        <p>Se você não fez esse pedido, ignore esta mensagem.</p>
-      </div>
-    `,
-  });
+    const confirmUrl = new URL('/api/newsletter/confirm', baseUrl);
+    confirmUrl.searchParams.set('email', email);
+    confirmUrl.searchParams.set('token', token);
 
-  if (ajax) {
-    return jsonStatus(
-      'pending',
-      'Confira seu e-mail para confirmar a inscrição.',
-    );
+    await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL,
+      to: email,
+      subject: 'Confirme sua inscrição na newsletter',
+      html: `
+        <div style="font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#1d1d1d">
+          <h1 style="font-size:24px;margin-bottom:12px">Confirme sua inscrição</h1>
+          <p>Recebemos seu pedido para entrar na newsletter do Mistério do Evangelho.</p>
+          <p>
+            <a href="${confirmUrl}" style="display:inline-block;padding:12px 18px;background:#171717;color:#fff;text-decoration:none;border-radius:6px">
+              Confirmar inscrição
+            </a>
+          </p>
+          <p>Se você não fez esse pedido, ignore esta mensagem.</p>
+        </div>
+      `,
+    });
+
+    if (ajax) {
+      return jsonStatus(
+        'pending',
+        'Confira seu e-mail para confirmar a inscrição.',
+      );
+    }
+
+    return redirectWithNewsletterStatus(baseUrl, redirectTo, 'pending');
+  } catch {
+    if (ajax) {
+      return jsonStatus(
+        'error',
+        'Não foi possível processar sua inscrição agora.',
+        500,
+      );
+    }
+
+    return redirectWithNewsletterStatus(baseUrl, redirectTo, 'error');
   }
-
-  return redirectWithNewsletterStatus(baseUrl, redirectTo, 'pending');
 }

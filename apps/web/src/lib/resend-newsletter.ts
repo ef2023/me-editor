@@ -23,13 +23,6 @@ function requiredEnv(name: string) {
   return value;
 }
 
-function maybeDuplicateError(error: unknown) {
-  const message =
-    error instanceof Error ? error.message : String(error ?? '');
-
-  return /already|exists|duplicate/i.test(message);
-}
-
 export async function ensureContactInNewsletterSegment(email: string) {
   if (!resend) {
     throw new Error('Resend client is not configured');

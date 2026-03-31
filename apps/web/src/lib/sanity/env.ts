@@ -1,10 +1,15 @@
+function optionalEnv(name: string) {
+  const value = process.env[name]?.trim();
+  return value || undefined;
+}
+
 export const sanityEnv = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? 'g6fc3waj',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
+  projectId: optionalEnv('NEXT_PUBLIC_SANITY_PROJECT_ID'),
+  dataset: optionalEnv('NEXT_PUBLIC_SANITY_DATASET'),
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? '2026-03-01',
   studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL ?? 'http://localhost:3333',
-  viewerToken: process.env.SANITY_VIEWER_TOKEN ?? 'sknfbOfEWDlmwZ9jHJCaHc3wFHT0isXbSJI8pXSUqXKsdT87CW3FGnTAgFCMFz0t2MUfqtmVlDQLF9jpCCM6JEwMEnlTCTOtEt6Yfx2W2cO6r1NY7O36WPXewzXvBcCqXqOxzC35wLab7c3xzcS31nCR19Gify9hmPiFf8Qz8ZrwQXL8rXcX',
-  revalidateSecret: process.env.SANITY_REVALIDATE_SECRET ?? 'c98d2cf0c9624c94ae9d546aa779f5413fedff784dfe4ef0bc2a9ac49d826cb3',
+  viewerToken: optionalEnv('SANITY_VIEWER_TOKEN'),
+  revalidateSecret: optionalEnv('SANITY_REVALIDATE_SECRET'),
 };
 
 export const hasSanityEnv = Boolean(sanityEnv.projectId && sanityEnv.dataset);

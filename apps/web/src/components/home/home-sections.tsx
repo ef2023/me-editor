@@ -5,14 +5,10 @@ import { getCategories, getHomePage, type HomeSection } from '@/lib/content-sour
 import { formatDate } from '@/lib/content-source'
 import styles from './home-sections.module.scss'
 
-type NewsletterStatus = 'pending' | 'confirmed' | 'invalid' | 'error' | undefined
-
 function NewsletterForm({
   successMessage,
-  newsletterStatus: _newsletterStatus,
 }: {
   successMessage?: string
-  newsletterStatus?: NewsletterStatus
 }) {
   return (
     <NewsletterInlineForm
@@ -25,10 +21,7 @@ function NewsletterForm({
   )
 }
 
-async function renderSection(
-  section: HomeSection,
-  newsletterStatus?: NewsletterStatus,
-) {
+async function renderSection(section: HomeSection) {
   switch (section._type) {
     case 'heroSection':
       return (
@@ -392,12 +385,11 @@ async function renderSection(
                 <p className={styles.ctaDescription}>{section.description}</p>
               ) : null}
 
-              {section.showNewsletterForm ? (
-                <NewsletterForm
-                  successMessage={section.successMessage}
-                  newsletterStatus={newsletterStatus}
-                />
-              ) : null}
+            {section.showNewsletterForm ? (
+              <NewsletterForm
+                successMessage={section.successMessage}
+              />
+            ) : null}
 
               {!section.showNewsletterForm &&
                 section.buttonLabel &&
@@ -419,18 +411,12 @@ async function renderSection(
   }
 }
 
-export async function HomeSections({
-  newsletterStatus,
-}: {
-  newsletterStatus?: NewsletterStatus
-}) {
+export async function HomeSections() {
   const home = await getHomePage()
 
   return (
     <>
-      {await Promise.all(
-        home.sections.map((section) => renderSection(section, newsletterStatus)),
-      )}
+      {await Promise.all(home.sections.map((section) => renderSection(section)))}
     </>
   )
 }

@@ -1,4 +1,12 @@
-import { defineArrayMember, defineField, defineType } from 'sanity';
+import {defineArrayMember, defineField, defineType} from 'sanity'
+
+type NewsletterValue = {
+  sendOnPublish?: boolean
+  subject?: string
+  teaser?: string
+  sentAt?: string
+  broadcastId?: string
+}
 
 export const postType = defineType({
   name: 'post',
@@ -44,14 +52,14 @@ export const postType = defineType({
       name: 'category',
       title: 'Categoria',
       type: 'reference',
-      to: [{ type: 'category' }],
+      to: [{type: 'category'}],
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'author',
       title: 'Autor',
       type: 'reference',
-      to: [{ type: 'author' }],
+      to: [{type: 'author'}],
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -74,6 +82,24 @@ export const postType = defineType({
       name: 'newsletter',
       title: 'Newsletter',
       type: 'object',
+      validation: (rule) =>
+        rule.custom((value) => {
+          const newsletter = value as NewsletterValue | undefined
+
+          if (!newsletter?.sendOnPublish) {
+            return true
+          }
+
+          if (!newsletter.subject?.trim()) {
+            return 'Preencha o assunto do e-mail quando "Enviar newsletter ao publicar" estiver ativo.'
+          }
+
+          if (!newsletter.teaser?.trim()) {
+            return 'Preencha o resumo da newsletter quando "Enviar newsletter ao publicar" estiver ativo.'
+          }
+
+          return true
+        }),
       fields: [
         defineField({
           name: 'sendOnPublish',
@@ -85,12 +111,14 @@ export const postType = defineType({
           name: 'subject',
           title: 'Assunto do e-mail',
           type: 'string',
+          validation: (rule) => rule.max(160),
         }),
         defineField({
           name: 'teaser',
           title: 'Resumo para newsletter',
           type: 'text',
           rows: 3,
+          validation: (rule) => rule.max(500),
         }),
         defineField({
           name: 'sentAt',
@@ -134,7 +162,7 @@ export const postType = defineType({
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [defineArrayMember({ type: 'string' })],
+      of: [defineArrayMember({type: 'string'})],
     }),
     defineField({
       name: 'seo',
@@ -149,16 +177,16 @@ export const postType = defineType({
         defineArrayMember({
           type: 'block',
           styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'Título 2', value: 'h2' },
-            { title: 'Título 3', value: 'h3' },
-            { title: 'Citação', value: 'blockquote' },
+            {title: 'Normal', value: 'normal'},
+            {title: 'Título 2', value: 'h2'},
+            {title: 'Título 3', value: 'h3'},
+            {title: 'Citação', value: 'blockquote'},
           ],
-          lists: [{ title: 'Lista', value: 'bullet' }],
+          lists: [{title: 'Lista', value: 'bullet'}],
           marks: {
             decorators: [
-              { title: 'Negrito', value: 'strong' },
-              { title: 'Itálico', value: 'em' },
+              {title: 'Negrito', value: 'strong'},
+              {title: 'Itálico', value: 'em'},
             ],
             annotations: [
               {
@@ -189,7 +217,7 @@ export const postType = defineType({
     {
       title: 'Mais recentes',
       name: 'publishedDesc',
-      by: [{ field: 'publishedAt', direction: 'desc' }],
+      by: [{field: 'publishedAt', direction: 'desc'}],
     },
   ],
   preview: {
@@ -199,4 +227,4 @@ export const postType = defineType({
       media: 'coverImage',
     },
   },
-});
+})

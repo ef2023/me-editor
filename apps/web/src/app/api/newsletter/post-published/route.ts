@@ -38,13 +38,6 @@ function getRequiredEnv(name: string) {
   return value;
 }
 
-function getWebhookSecret() {
-  return (
-    process.env.NEWSLETTER_WEBHOOK_SECRET?.trim() ||
-    process.env.SANITY_REVALIDATE_SECRET?.trim()
-  );
-}
-
 function buildEmailSubject(post: PostNewsletterData) {
   const customSubject = post.newsletter?.subject?.trim();
 
@@ -70,7 +63,6 @@ function buildEmailTeaser(post: PostNewsletterData) {
 
 export async function POST(request: NextRequest) {
   try {
-    const secret = getWebhookSecret();
 
     if (!secret) {
       throw new Error(
@@ -79,23 +71,6 @@ export async function POST(request: NextRequest) {
     }
 
     const {isValidSignature, body} = await parseBody<WebhookPayload>(request, secret);
-
-    if (!isValidSignature) {
-      return NextResponse.json({ok: false, error: 'Invalid signature'}, {status: 401});
-    }
-
-    getRequiredEnv('RESEND_API_KEY');
-    getRequiredEnv('RESEND_FROM_EMAIL');
-    getRequiredEnv('NEXT_PUBLIC_SITE_URL');
-    const postId = body?._id?.trim();
-    const contentType = body?._type?.trim();
-
-    if (contentType && contentType !== 'post') {
-      return NextResponse.json(
-        {ok: true, skipped: true, reason: `Webhook ignorado para _type=${contentType}.`},
-        {status: 200},
-      );
-    }
 
     if (!postId) {
       return NextResponse.json(

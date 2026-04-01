@@ -88,9 +88,12 @@ export async function GET(request: Request) {
       })
       .commit();
 
+  try {
     await ensureContactInNewsletterSegment(email);
+  } catch (error) {
+    console.error('Falha ao sincronizar contato confirmado no segmento:', error);
+  }
 
-    if (resend && process.env.RESEND_FROM_EMAIL) {
       await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL,
         to: email,
@@ -108,11 +111,4 @@ export async function GET(request: Request) {
           </div>
         `,
       });
-    }
-
-    return redirectWithStatus(baseUrl, 'confirmed');
-  } catch (error) {
-    console.error('Erro ao confirmar inscrição da newsletter:', error);
-    return redirectWithStatus(baseUrl, 'invalid');
-  }
 }

@@ -64,14 +64,6 @@ function buildEmailTeaser(post: PostNewsletterData) {
 export async function POST(request: NextRequest) {
   try {
 
-    if (!secret) {
-      throw new Error(
-        'Variável de ambiente ausente: NEWSLETTER_WEBHOOK_SECRET (ou SANITY_REVALIDATE_SECRET como fallback).',
-      );
-    }
-
-    const {isValidSignature, body} = await parseBody<WebhookPayload>(request, secret);
-
     if (!postId) {
       return NextResponse.json(
         {ok: false, error: 'Payload do webhook sem _id do post.'},

@@ -13,8 +13,9 @@ type PendingDoc = {
   _id: string;
   email: string;
   tokenHash: string;
-  status: string;
+  status: 'pending' | 'confirmed' | 'expired' | 'invalid';
   expiresAt: string;
+  source?: string;
 };
 
 const resend = process.env.RESEND_API_KEY
@@ -32,59 +33,60 @@ function redirectWithStatus(
 }
 
 export async function GET(request: Request) {
-  const {searchParams} = new URL(request.url);
-  const email = normalizeEmail(searchParams.get('email') ?? '');
-  const token = searchParams.get('token') ?? '';
-
   const baseUrl =
     process.env.NEWSLETTER_CONFIRM_REDIRECT_BASE ||
     process.env.NEXT_PUBLIC_SITE_URL ||
     'http://localhost:3000';
 
-  if (!email || !token || !process.env.SANITY_WRITE_TOKEN) {
-    return redirectWithStatus(baseUrl, 'invalid');
-  }
+  try {
+    const {searchParams} = new URL(request.url);
+    const email = normalizeEmail(searchParams.get('email') ?? '');
+    const token = searchParams.get('token') ?? '';
 
-  const data = await writeClient.fetch<PendingDoc | null>(
-    newsletterPendingByEmailQuery,
-    {email},
-  );
+    if (!email || !token || !process.env.SANITY_WRITE_TOKEN) {
+      return redirectWithStatus(baseUrl, 'invalid');
+    }
 
-  if (!data || data.status !== 'pending') {
-    return redirectWithStatus(baseUrl, 'missing');
-  }
+    const data = await writeClient.fetch<PendingDoc | null>(
+      newsletterPendingByEmailQuery,
+      {email},
+    );
 
-  const isExpired = new Date(data.expiresAt).getTime() < Date.now();
-  const isValid = data.tokenHash === hashValue(token);
+    if (!data || data.status !== 'pending') {
+      return redirectWithStatus(baseUrl, 'missing');
+    }
 
-  if (!isValid) {
-    return redirectWithStatus(baseUrl, 'invalid');
-  }
+    const isExpired = new Date(data.expiresAt).getTime() < Date.now();
+    const isValid = data.tokenHash === hashValue(token);
 
-  if (isExpired) {
-    return redirectWithStatus(baseUrl, 'expired');
-  }
+    if (!isValid) {
+      return redirectWithStatus(baseUrl, 'invalid');
+    }
 
-  const subscriberId = buildSubscriberId(email);
-  const now = new Date().toISOString();
+    if (isExpired) {
+      return redirectWithStatus(baseUrl, 'expired');
+    }
 
-  await writeClient.createIfNotExists({
-    _id: subscriberId,
-    _type: 'newsletterSubscriber',
-    email,
-    source: 'home',
-    status: 'active',
-    subscribedAt: now,
-    confirmedAt: now,
-  });
+    const subscriberId = buildSubscriberId(email);
+    const now = new Date().toISOString();
 
-  await writeClient
-    .patch(data._id)
-    .set({
-      status: 'confirmed',
+    await writeClient.createIfNotExists({
+      _id: subscriberId,
+      _type: 'newsletterSubscriber',
+      email,
+      source: data.source ?? 'home',
+      status: 'active',
+      subscribedAt: now,
       confirmedAt: now,
-    })
-    .commit();
+    });
+
+    await writeClient
+      .patch(data._id)
+      .set({
+        status: 'confirmed',
+        confirmedAt: now,
+      })
+      .commit();
 
   try {
     await ensureContactInNewsletterSegment(email);
@@ -92,8 +94,6 @@ export async function GET(request: Request) {
     console.error('Falha ao sincronizar contato confirmado no segmento:', error);
   }
 
-  if (resend && process.env.RESEND_FROM_EMAIL) {
-    try {
       await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL,
         to: email,
@@ -111,10 +111,4 @@ export async function GET(request: Request) {
           </div>
         `,
       });
-    } catch (error) {
-      console.error('Falha ao enviar e-mail de boas-vindas da newsletter:', error);
-    }
-  }
-
-  return redirectWithStatus(baseUrl, 'confirmed');
 }

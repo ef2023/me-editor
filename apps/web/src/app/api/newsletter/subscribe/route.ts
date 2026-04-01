@@ -12,9 +12,15 @@ import {
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
+const NEWSLETTER_TOKEN_TTL_MS = 1000 * 60 * 60 * 24;
 
 function isAjaxRequest(request: Request) {
   return request.headers.get('x-newsletter-ajax') === '1';
+}
+
+function normalizeSource(value: string) {
+  const sanitized = value.trim().slice(0, 64);
+  return sanitized || 'home';
 }
 
 function jsonStatus(
@@ -46,7 +52,7 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const email = normalizeEmail(String(formData.get('email') ?? ''));
   const redirectTo = String(formData.get('redirectTo') ?? '/');
-  const source = String(formData.get('source') ?? 'home');
+  const source = normalizeSource(String(formData.get('source') ?? 'home'));
 
   const baseUrl =
     process.env.NEWSLETTER_CONFIRM_REDIRECT_BASE ??
@@ -83,9 +89,7 @@ export async function POST(request: Request) {
     const token = createNewsletterToken();
     const tokenHash = hashValue(token);
     const now = new Date();
-    const expiresAt = new Date(
-      now.getTime() + 1000 * 60 * 60 * 24,
-    ).toISOString();
+    const expiresAt = new Date(now.getTime() + NEWSLETTER_TOKEN_TTL_MS).toISOString();
 
     const _id = buildPendingId(email);
 
@@ -130,7 +134,9 @@ export async function POST(request: Request) {
     }
 
     return redirectWithNewsletterStatus(baseUrl, redirectTo, 'pending');
-  } catch {
+  } catch (error) {
+    console.error('Erro ao registrar inscrição pendente da newsletter:', error);
+
     if (ajax) {
       return jsonStatus(
         'error',

@@ -345,6 +345,7 @@ export const newsletterPendingByEmailQuery = defineQuery(`
   ][0]{
     _id,
     email,
+    source,
     tokenHash,
     status,
     expiresAt

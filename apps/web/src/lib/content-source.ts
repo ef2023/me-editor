@@ -4,7 +4,6 @@ import {
   getAllPosts as getLocalAllPosts,
   getCategories as getLocalCategories,
   getPostByCategoryAndSlug as getLocalPostByCategoryAndSlug,
-  getRelatedPosts as getLocalRelatedPosts,
 } from '@/lib/content';
 import {siteConfig} from '@/lib/site';
 import {staticPages, type StaticPageContent} from '@/lib/static-pages';
